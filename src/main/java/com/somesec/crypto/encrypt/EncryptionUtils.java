@@ -16,7 +16,7 @@ public class EncryptionUtils {
 
     public static byte[] aesSymmetricEncrypt(byte[] data, Key encryptionKey) {
         try {
-            Cipher cipher = Cipher.getInstance((String) CryptoConstantsEnum.AES.getValue(), BouncyCastleProvider.PROVIDER_NAME);
+            Cipher cipher = Cipher.getInstance((String) CryptoConstantsEnum.AES_CIPHER.getValue(), BouncyCastleProvider.PROVIDER_NAME);
             SecureRandom random = SecureRandom.getInstanceStrong();
             final byte[] nonce = new byte[(Integer) CryptoConstantsEnum.AES_DEFAULT_GCM_NONCE_LENGTH.getValue()];
             random.nextBytes(nonce);

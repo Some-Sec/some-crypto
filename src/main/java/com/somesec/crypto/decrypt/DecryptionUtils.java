@@ -15,7 +15,7 @@ public class DecryptionUtils {
 
     public static byte[] aesSymmetricDecrypt(byte[] bytes, Key key) {
         try {
-            Cipher cipher = Cipher.getInstance((String) CryptoConstantsEnum.AES.getValue(), BouncyCastleProvider.PROVIDER_NAME);
+            Cipher cipher = Cipher.getInstance((String) CryptoConstantsEnum.AES_CIPHER.getValue(), BouncyCastleProvider.PROVIDER_NAME);
             ByteBuffer bb = ByteBuffer.wrap(bytes);
             byte[] iv = new byte[(Integer) CryptoConstantsEnum.AES_DEFAULT_GCM_NONCE_LENGTH.getValue()];
             bb.get(iv);

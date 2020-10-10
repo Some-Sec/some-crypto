@@ -15,6 +15,7 @@ public enum CryptoConstantsEnum {
     RSA("RSA"),
     ECDSA("ECDSA"),
     AES("AES"),
+    AES_CIPHER("AES/GCM/NoPadding"),
     AES_DEFAULT_GCM_NONCE_LENGTH(12),
     AES_DEFAULT_GCM_TAG_LENGTH(16),
     KEY_DEFAULT_HKDF_INFO("aes-key"),
