@@ -108,7 +108,7 @@ public class KeyUtils {
         throw new CryptoOperationException(String.format("Algorithm %s is not supported.", algorithm));
     }
 
-    public static Key deserializeAsymmetricPrivateKey(String b64Key) {
+    public static Key deserializeAsymmetricKey(String b64Key) {
         try {
             AsymmetricKeyParameter keyParams = PrivateKeyFactory.createKey(Base64.getDecoder().decode(b64Key));
             if (keyParams.isPrivate()) {
@@ -132,23 +132,6 @@ public class KeyUtils {
             }
         } catch (Exception ex) {
             throw CryptoOperationException.keyDeserializationException(b64Key, ex);
-        }
-    }
-
-    public static Key deserializeAsymmetricPublicKey(String b64Key) {
-        //Try to deserialize as RSA key
-        try {
-            final KeyFactory keyFactory = KeyFactory.getInstance(RSA, BouncyCastleProvider.PROVIDER_NAME);
-            return keyFactory.generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(b64Key)));
-        } catch (Exception ex) {
-            LOGGER.info("Could not deserialize PublicKey as a RSA key. Trying ECDSA.");
-            try {
-                final KeyFactory keyFactory = KeyFactory.getInstance(ECDSA, BouncyCastleProvider.PROVIDER_NAME);
-                return keyFactory.generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(b64Key)));
-            } catch (Exception ex2) {
-                LOGGER.error("Could not deserialize PublicKey as RSA.", ex);
-                throw CryptoOperationException.keyDeserializationException(b64Key, ex2);
-            }
         }
     }
 

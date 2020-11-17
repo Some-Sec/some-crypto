@@ -43,12 +43,12 @@ public class KeyServiceDefaultImpl implements KeyService {
 
     @Override
     public PrivateKey deserializePrivateKey(String key) {
-        return (PrivateKey) KeyUtils.deserializeAsymmetricPrivateKey(key);
+        return (PrivateKey) KeyUtils.deserializeAsymmetricKey(key);
     }
 
     @Override
     public PublicKey deserializePublicKey(String key) {
-        return (PublicKey) KeyUtils.deserializeAsymmetricPublicKey(key);
+        return (PublicKey) KeyUtils.deserializeAsymmetricKey(key);
     }
 
     @Override
