@@ -17,8 +17,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.generators.HKDFBytesGenerator;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
@@ -37,12 +36,12 @@ import com.somesec.crypto.exception.CryptoOperationException;
 /**
  * Key parsing and utility operations using BouncyCastle
  */
+@Slf4j
 public class KeyUtils {
 
-    private final static Logger LOGGER = LogManager.getLogger(KeyUtils.class);
-    private final static String RSA = "RSA";
-    private final static String ECDSA = "ECDSA";
-    private final static String AES = "AES";
+    private static final String RSA = "RSA";
+    private static final String ECDSA = "ECDSA";
+    private static final String AES = "AES";
 
     public static Key generateKeyWithPBKDF2(String keyDerivationAlgorithm, String keyGeneratedAlgorithm, char[] passphrase, int iterationCount, int keyLength,
         byte[] salt)
@@ -141,12 +140,12 @@ public class KeyUtils {
             final KeyFactory keyFactory = KeyFactory.getInstance(RSA, BouncyCastleProvider.PROVIDER_NAME);
             return keyFactory.generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(b64Key)));
         } catch (Exception ex) {
-            LOGGER.info("Could not deserialize PublicKey as a RSA key. Trying ECDSA.");
+            log.info("Could not deserialize PublicKey as a RSA key. Trying ECDSA.");
             try {
                 final KeyFactory keyFactory = KeyFactory.getInstance(ECDSA, BouncyCastleProvider.PROVIDER_NAME);
                 return keyFactory.generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(b64Key)));
             } catch (Exception ex2) {
-                LOGGER.error("Could not deserialize PublicKey as RSA.", ex);
+                log.error("Could not deserialize PublicKey as RSA.", ex);
                 throw CryptoOperationException.keyDeserializationException(b64Key, ex2);
             }
         }
