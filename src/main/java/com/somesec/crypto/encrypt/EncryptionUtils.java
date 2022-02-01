@@ -20,7 +20,7 @@ public class EncryptionUtils {
             SecureRandom random = SecureRandom.getInstanceStrong();
             final byte[] nonce = new byte[(Integer) CryptoConstantsEnum.AES_DEFAULT_GCM_NONCE_LENGTH.getValue()];
             random.nextBytes(nonce);
-            GCMParameterSpec spec = new GCMParameterSpec((Integer) CryptoConstantsEnum.AES_DEFAULT_GCM_TAG_LENGTH.getValue() * 8, nonce);
+            GCMParameterSpec spec = new GCMParameterSpec((Integer) CryptoConstantsEnum.AES_DEFAULT_GCM_TAG_LENGTH_BYTE.getValue() * 8, nonce);
             cipher.init(Cipher.ENCRYPT_MODE, encryptionKey, spec);
             byte[] cipherText = cipher.doFinal(data);
             return ByteBuffer.allocate((Integer) CryptoConstantsEnum.AES_DEFAULT_GCM_NONCE_LENGTH.getValue() + cipherText.length)

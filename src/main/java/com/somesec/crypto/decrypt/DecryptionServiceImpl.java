@@ -34,7 +34,7 @@ public class DecryptionServiceImpl implements DecryptionService {
         return cryptoOperations
                 .stream()
                 .filter(decryptionOperation -> decryptionOperation.getSupportedOperation() == CryptoOperation.fromKey(key))
-                .filter(decryptionOperation -> key.getClass().isAssignableFrom(decryptionOperation.getKeyClass()))
+                .filter(decryptionOperation -> decryptionOperation.getKeyClass().isAssignableFrom(key.getClass()))
                 .findAny()
                 .orElseThrow(UnsupportedOperationException::new);
 

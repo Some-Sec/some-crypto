@@ -17,7 +17,7 @@ public enum CryptoConstantsEnum {
     AES("AES"),
     AES_CIPHER("AES/GCM/NoPadding"),
     AES_DEFAULT_GCM_NONCE_LENGTH(12),
-    AES_DEFAULT_GCM_TAG_LENGTH(16),
+    AES_DEFAULT_GCM_TAG_LENGTH_BYTE(16),
     KEY_DEFAULT_HKDF_INFO("aes-key"),
     KEY_HKDF_DEFAULT_DIGEST(new SHA256Digest()),
     KEY_DEFAULT_PBKDF2_FACTORY("PBKDF2WithHmacSHA256"),
@@ -29,6 +29,7 @@ public enum CryptoConstantsEnum {
             0x0A, (byte) 0x89, (byte) 0xAE, (byte) 0x96, 0x5F, 0x19, 0x5D, 0x53, 0x62, 0x58, (byte) 0x82, 0x2C, 0x09, (byte) 0xAD, 0x6E, 0x15, (byte) 0xD4}),
     KEY_DEFAULT_ECDSA_CURVE_NAME("prime192v1"),
     KEY_DEFAULT_RSA_SIZE(2048),
+    BIT_IN_A_BYTE(8),
     TOKEN_DEFAULT_ALGORITHM(JWEAlgorithm.RSA_OAEP_256),
     TOKEN_DEFAULT_ENCRYPTION_METHOD(EncryptionMethod.A256GCM);
 
