@@ -8,8 +8,8 @@ import java.security.Key;
  */
 public interface DecryptionService {
 
-    String symDecryptDefault(String cypheredText, Key key);
+    String decrypt(String cypheredText, Key key);
 
-    byte[] symDecryptDefault(byte[] cypheredTextBytes, Key key);
+    byte[] decrypt(byte[] cypheredBytes, Key key);
 
 }
