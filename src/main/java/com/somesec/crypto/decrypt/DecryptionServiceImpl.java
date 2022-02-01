@@ -2,16 +2,17 @@ package com.somesec.crypto.decrypt;
 
 import com.somesec.crypto.CryptoOperation;
 
-import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.security.PrivateKey;
 import java.util.List;
 
 public class DecryptionServiceImpl implements DecryptionService {
 
-    private static final String KEY_TYPE_NOT_SUPPORTED = "KeyType [{}] not supported";
-    private List<DecryptionOperation> cryptoOperations;
+    private final List<DecryptionOperation> cryptoOperations;
+
+    public DecryptionServiceImpl(List<DecryptionOperation> cryptoOperations) {
+        this.cryptoOperations = cryptoOperations;
+    }
 
 
     @Override
@@ -21,26 +22,22 @@ public class DecryptionServiceImpl implements DecryptionService {
 
     @Override
     public byte[] decrypt(byte[] cypheredBytes, Key key) {
-        if (key instanceof PrivateKey) {
-            // todo, implement async decryption
-            throw new IllegalStateException("Method not implemented");
-        } else if (key instanceof SecretKey) {
-            final DecryptionOperation decryptionOperation = findSupportedOperation(CryptoOperation.SYMMETRIC, key.getClass());
-            return decryptionOperation.decrypt(cypheredBytes,key);
-//            return DecryptionUtils.aesSymmetricDecrypt(cypheredBytes, key);
-        } else {
-            throw new IllegalArgumentException(String.format(KEY_TYPE_NOT_SUPPORTED, key.getClass()));
-        }
+        final DecryptionOperation decryptionOperation = findSupportedOperation(key);
+        return decryptionOperation.decrypt(cypheredBytes, key);
+
 
     }
 
+    // todo unit test
+    protected DecryptionOperation findSupportedOperation(Key key) {
 
-    private DecryptionOperation findSupportedOperation(CryptoOperation cryptoOperation, Class<? extends Key> keyClass) {
-        return cryptoOperations.stream()
-                .filter(decryptionOperation -> decryptionOperation.getSupportedOperation() == cryptoOperation)
-                .filter(decryptionOperation -> keyClass.isAssignableFrom(decryptionOperation.getKeyClass()))
+        return cryptoOperations
+                .stream()
+                .filter(decryptionOperation -> decryptionOperation.getSupportedOperation() == CryptoOperation.fromKey(key))
+                .filter(decryptionOperation -> key.getClass().isAssignableFrom(decryptionOperation.getKeyClass()))
                 .findAny()
                 .orElseThrow(UnsupportedOperationException::new);
+
 
     }
 }
