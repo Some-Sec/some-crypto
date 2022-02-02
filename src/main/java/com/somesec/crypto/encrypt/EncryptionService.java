@@ -8,8 +8,8 @@ import java.security.Key;
  */
 public interface EncryptionService {
 
-    String symEncryptDefault(String plaintext, Key key);
+    String encrypt(String plaintext, Key key);
 
-    byte[] symEncryptDefault(byte[] plaintextBytes, Key key);
+    byte[] encrypt(byte[] plaintextBytes, Key key);
 
 }
