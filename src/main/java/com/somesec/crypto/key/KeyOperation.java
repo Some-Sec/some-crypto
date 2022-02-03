@@ -2,10 +2,8 @@ package com.somesec.crypto.key;
 
 import com.somesec.crypto.constant.CryptoAlgorithm;
 
-import java.security.Key;
-import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.SecretKey;
 
@@ -14,11 +12,11 @@ import javax.crypto.SecretKey;
  */
 public interface KeyOperation {
 
-    Key deriveSecretKey(char[] passphrase, CryptoAlgorithm algorithm) throws Exception;
+    Key deriveSecretKey(char[] passphrase, CryptoAlgorithm algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException;
 
-    KeyPair generateKeyPair(CryptoAlgorithm algorithm);
+    KeyPair generateKeyPair(CryptoAlgorithm algorithm) throws NoSuchProviderException, NoSuchAlgorithmException, InvalidAlgorithmParameterException;
 
-    Key generateSecretKey();
+    Key generateSecretKey() throws NoSuchAlgorithmException, InvalidKeySpecException;
 
     PrivateKey deserializePrivateKey(String key) throws Exception;
 
