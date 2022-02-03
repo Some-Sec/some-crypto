@@ -1,8 +1,8 @@
 package com.somesec.crypto.decrypt;
 
-import com.somesec.crypto.CryptoConstantsEnum;
-import com.somesec.crypto.CryptoOperation;
-import com.somesec.crypto.MessagesCode;
+import com.somesec.crypto.constant.CryptoConstantsEnum;
+import com.somesec.crypto.constant.CryptoOperation;
+import com.somesec.crypto.constant.MessagesCode;
 import com.somesec.crypto.exception.CryptoOperationException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 

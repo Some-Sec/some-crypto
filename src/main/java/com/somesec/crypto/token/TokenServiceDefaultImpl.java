@@ -1,8 +1,6 @@
 package com.somesec.crypto.token;
 
-import com.nimbusds.jose.EncryptionMethod;
-import com.nimbusds.jose.JWEAlgorithm;
-import com.somesec.crypto.CryptoConstantsEnum;
+import com.somesec.crypto.constant.CryptoConstantsEnum;
 
 public class TokenServiceDefaultImpl implements TokenService {
 

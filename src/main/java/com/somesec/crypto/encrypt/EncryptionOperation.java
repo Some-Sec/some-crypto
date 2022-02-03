@@ -1,6 +1,6 @@
 package com.somesec.crypto.encrypt;
 
-import com.somesec.crypto.CryptoOperation;
+import com.somesec.crypto.constant.CryptoOperation;
 
 import java.security.Key;
 

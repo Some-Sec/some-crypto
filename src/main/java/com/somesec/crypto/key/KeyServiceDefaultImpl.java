@@ -11,7 +11,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 
-import com.somesec.crypto.CryptoConstantsEnum;
+import com.somesec.crypto.constant.CryptoConstantsEnum;
 
 public class KeyServiceDefaultImpl implements KeyService {
 

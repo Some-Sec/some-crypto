@@ -1,4 +1,4 @@
-package com.somesec.crypto.token;
+package com.somesec.crypto.constant;
 
 public interface Constant {
 

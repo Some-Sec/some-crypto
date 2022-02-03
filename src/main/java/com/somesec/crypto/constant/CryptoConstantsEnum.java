@@ -1,8 +1,8 @@
-package com.somesec.crypto;
+package com.somesec.crypto.constant;
 
 import com.nimbusds.jose.EncryptionMethod;
 import com.nimbusds.jose.JWEAlgorithm;
-import com.somesec.crypto.token.Constant;
+import com.somesec.crypto.constant.Constant;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 
 /**

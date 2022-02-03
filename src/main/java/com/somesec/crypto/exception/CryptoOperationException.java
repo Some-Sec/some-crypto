@@ -1,6 +1,6 @@
 package com.somesec.crypto.exception;
 
-import com.somesec.crypto.MessagesCode;
+import com.somesec.crypto.constant.MessagesCode;
 
 public class CryptoOperationException extends RuntimeException {
     public CryptoOperationException(String message) {

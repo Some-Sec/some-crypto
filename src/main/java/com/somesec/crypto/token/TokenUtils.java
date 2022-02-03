@@ -12,8 +12,8 @@ import com.nimbusds.jose.JWEObject;
 import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.RSADecrypter;
 import com.nimbusds.jose.crypto.RSAEncrypter;
-import com.somesec.crypto.CryptoConstantsEnum;
-import com.somesec.crypto.MessagesCode;
+import com.somesec.crypto.constant.CryptoConstantsEnum;
+import com.somesec.crypto.constant.MessagesCode;
 import com.somesec.crypto.exception.CryptoOperationException;
 
 public class TokenUtils {

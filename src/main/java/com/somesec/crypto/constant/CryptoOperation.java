@@ -1,4 +1,4 @@
-package com.somesec.crypto;
+package com.somesec.crypto.constant;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
