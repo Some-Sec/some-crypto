@@ -9,6 +9,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 
 import com.somesec.crypto.CryptoOperation;
+import com.somesec.crypto.exception.CryptoExceptionFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.somesec.crypto.CryptoConstantsEnum;
@@ -30,7 +31,7 @@ public final class AESEncryption implements EncryptionOperation {
                 .put(cipherText)
                 .array();
         } catch (Exception ex) {
-            throw CryptoOperationException.encryptionException(CryptoConstantsEnum.AES.getValue(), ex);
+            throw CryptoExceptionFactory.encryptionException(CryptoConstantsEnum.AES.getValue(), ex);
         }
     }
 

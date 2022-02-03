@@ -17,6 +17,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.somesec.crypto.exception.CryptoExceptionFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.generators.HKDFBytesGenerator;
@@ -75,9 +76,9 @@ public class KeyUtils {
                     return generator.generateKeyPair();
             }
         } catch (ClassCastException e) {
-            throw CryptoOperationException.mismatchedParameters(algorithm, parameters, e);
+            throw CryptoExceptionFactory.mismatchedParameters(algorithm, parameters, e);
         } catch (Exception e) {
-            throw CryptoOperationException.keyGenerationException(algorithm, e);
+            throw CryptoExceptionFactory.keyGenerationException(algorithm, e);
         }
         throw new CryptoOperationException(String.format("Algorithm %s is not supported.", algorithm));
     }
@@ -100,9 +101,9 @@ public class KeyUtils {
                     return keyGen.generateKey();
             }
         } catch (ClassCastException e) {
-            throw CryptoOperationException.mismatchedParameters(algorithm, parameters, e);
+            throw CryptoExceptionFactory.mismatchedParameters(algorithm, parameters, e);
         } catch (Exception e) {
-            throw CryptoOperationException.keyGenerationException(algorithm, e);
+            throw CryptoExceptionFactory.keyGenerationException(algorithm, e);
         }
         throw new CryptoOperationException(String.format("Algorithm %s is not supported.", algorithm));
     }
@@ -130,7 +131,7 @@ public class KeyUtils {
                 throw new Exception("Unsupported PublicKey parameters for key\n" + b64Key);
             }
         } catch (Exception ex) {
-            throw CryptoOperationException.keyDeserializationException(b64Key, ex);
+            throw CryptoExceptionFactory.keyDeserializationException(b64Key, ex);
         }
     }
 
@@ -146,7 +147,7 @@ public class KeyUtils {
                 return keyFactory.generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(b64Key)));
             } catch (Exception ex2) {
                 log.error("Could not deserialize PublicKey as RSA.", ex);
-                throw CryptoOperationException.keyDeserializationException(b64Key, ex2);
+                throw CryptoExceptionFactory.keyDeserializationException(b64Key, ex2);
             }
         }
     }

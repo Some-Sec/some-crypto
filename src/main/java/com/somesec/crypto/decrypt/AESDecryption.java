@@ -2,6 +2,7 @@ package com.somesec.crypto.decrypt;
 
 import com.somesec.crypto.CryptoConstantsEnum;
 import com.somesec.crypto.CryptoOperation;
+import com.somesec.crypto.exception.CryptoExceptionFactory;
 import com.somesec.crypto.exception.CryptoOperationException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -24,7 +25,7 @@ public final class AESDecryption implements DecryptionOperation {
             cipher.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec((int) CryptoConstantsEnum.AES_DEFAULT_GCM_TAG_LENGTH_BYTE.getValue() * (int) CryptoConstantsEnum.BIT_IN_A_BYTE.getValue(), iv));
             return cipher.doFinal(cipherText);
         } catch (Exception ex) {
-            throw CryptoOperationException.decryptionException(CryptoConstantsEnum.AES.getValue(), ex);
+            throw CryptoExceptionFactory.decryptionException(CryptoConstantsEnum.AES.getValue(), ex);
         }
     }
 
