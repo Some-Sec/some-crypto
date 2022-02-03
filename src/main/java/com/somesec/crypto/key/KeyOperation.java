@@ -5,8 +5,6 @@ import com.somesec.crypto.constant.CryptoAlgorithm;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 
-import javax.crypto.SecretKey;
-
 /**
  * KeyService interface used in all other sec-channel components. Utility for key generation and parsing based on default parameters of the implementation.
  */

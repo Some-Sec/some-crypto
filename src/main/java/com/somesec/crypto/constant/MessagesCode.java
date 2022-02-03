@@ -21,10 +21,9 @@ public enum MessagesCode {
         this.message = message;
     }
 
-    public String getMessage(String ...args){
+    public String getMessage(String... args) {
         return String.format(this.message, (Object[]) args);
     }
-
 
 
 }

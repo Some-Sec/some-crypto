@@ -10,7 +10,7 @@ public enum CryptoOperation {
 
     private static final String KEY_TYPE_NOT_SUPPORTED = "KeyType [%s] not supported";
 
-    public static CryptoOperation fromKey(Key key){
+    public static CryptoOperation fromKey(Key key) {
         if (key instanceof PrivateKey) {
             return CryptoOperation.ASYMMETRIC;
         } else if (key instanceof SecretKey) {

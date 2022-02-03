@@ -22,8 +22,7 @@ public class DecryptionServiceTest {
 
 
     @Test
-    public void aesDecryptionTest()
-    {
+    public void aesDecryptionTest() {
         Security.addProvider(new BouncyCastleProvider());
         Key aesKey = new SecretKeySpec(AES_KEY_256_B64.getBytes(), "AES");
         byte[] decryptedBytes = service.decrypt(b64Decoder.decode(ENCRYPTED_TEXT_B64), aesKey);

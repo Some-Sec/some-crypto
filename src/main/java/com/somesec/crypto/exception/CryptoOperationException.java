@@ -7,7 +7,7 @@ public class CryptoOperationException extends RuntimeException {
         super(message);
     }
 
-    public CryptoOperationException(MessagesCode message, String ...args) {
+    public CryptoOperationException(MessagesCode message, String... args) {
         super(message.getMessage(args));
     }
 
@@ -15,7 +15,7 @@ public class CryptoOperationException extends RuntimeException {
         super(message, cause);
     }
 
-    public CryptoOperationException(MessagesCode message, Throwable cause, String ...args) {
+    public CryptoOperationException(MessagesCode message, Throwable cause, String... args) {
         super(message.getMessage(args), cause);
     }
 

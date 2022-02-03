@@ -1,15 +1,5 @@
 package com.somesec.crypto.key;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.security.*;
-import java.security.spec.*;
-import java.util.Base64;
-
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
-
 import com.somesec.crypto.constant.*;
 import com.somesec.crypto.exception.CryptoOperationException;
 import org.bouncycastle.crypto.Digest;
@@ -23,9 +13,20 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
 import org.bouncycastle.util.encoders.Hex;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
+
 public class DefaultKeyOperationImpl implements KeyOperation {
 
-    public static final int KEYGEN_SEED = 256;
 
     @Override
     public Key deriveSecretKey(char[] passphrase, CryptoAlgorithm algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -62,7 +63,7 @@ public class DefaultKeyOperationImpl implements KeyOperation {
 
     @Override
     public Key generateSecretKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        byte[] seed = new byte[KEYGEN_SEED];
+        byte[] seed = new byte[(int) CryptoConstantsEnum.KEY_DEFAULT_AES_KEY_SIZE.getValue()];
         final SecureRandom rnd = SecureRandom.getInstanceStrong();
         rnd.nextBytes(seed);
         return this.deriveSecretKey(new String(seed, StandardCharsets.UTF_8).toCharArray(), SupportedAlgorithm.AES);

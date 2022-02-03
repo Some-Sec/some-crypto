@@ -6,9 +6,9 @@ import com.somesec.crypto.key.KeyGenEcParameters;
 import com.somesec.crypto.key.KeyGenParameters;
 import com.somesec.crypto.key.KeyGenRsaParameters;
 
-public enum SupportedAlgorithm implements CryptoAlgorithm{
+public enum SupportedAlgorithm implements CryptoAlgorithm {
 
-    AES{
+    AES {
         @Override
         public CryptoOperation getCryptoOperation() {
             return CryptoOperation.SYMMETRIC;
@@ -18,7 +18,7 @@ public enum SupportedAlgorithm implements CryptoAlgorithm{
         public KeyGenParameters getKeyGenParameters() {
             return new KeyGenAesParameters(CryptoConstantsEnum.KEY_DEFAULT_AES_KEY_SIZE.getValue());
         }
-    },RSA{
+    }, RSA {
         @Override
         public CryptoOperation getCryptoOperation() {
             return CryptoOperation.ASYMMETRIC;
@@ -28,7 +28,7 @@ public enum SupportedAlgorithm implements CryptoAlgorithm{
         public KeyGenParameters getKeyGenParameters() {
             return new KeyGenRsaParameters(CryptoConstantsEnum.KEY_DEFAULT_RSA_SIZE.getValue());
         }
-    },ECDSA{
+    }, ECDSA {
         @Override
         public CryptoOperation getCryptoOperation() {
             return CryptoOperation.ASYMMETRIC;

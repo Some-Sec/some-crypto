@@ -1,15 +1,14 @@
 package com.somesec.crypto.encrypt;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.Test;
+
+import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.Security;
 import java.util.Base64;
 import java.util.Collections;
-
-import javax.crypto.spec.SecretKeySpec;
-
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.junit.Test;
 
 public class AESEncryptionTest {
 

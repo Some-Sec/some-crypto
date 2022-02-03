@@ -25,7 +25,7 @@ public final class AESDecryption implements DecryptionOperation {
             cipher.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec((int) CryptoConstantsEnum.AES_DEFAULT_GCM_TAG_LENGTH_BYTE.getValue() * (int) CryptoConstantsEnum.BIT_IN_A_BYTE.getValue(), iv));
             return cipher.doFinal(cipherText);
         } catch (Exception ex) {
-            throw new CryptoOperationException(MessagesCode.ERROR_DECRYPTION_ALGO, ex,CryptoConstantsEnum.AES.getValue());
+            throw new CryptoOperationException(MessagesCode.ERROR_DECRYPTION_ALGO, ex, CryptoConstantsEnum.AES.getValue());
         }
     }
 

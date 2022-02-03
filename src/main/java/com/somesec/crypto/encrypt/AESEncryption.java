@@ -1,19 +1,17 @@
 package com.somesec.crypto.encrypt;
 
-import java.nio.ByteBuffer;
-import java.security.Key;
-import java.security.SecureRandom;
+import com.somesec.crypto.constant.CryptoConstantsEnum;
+import com.somesec.crypto.constant.CryptoOperation;
+import com.somesec.crypto.constant.MessagesCode;
+import com.somesec.crypto.exception.CryptoOperationException;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
-
-import com.somesec.crypto.constant.CryptoOperation;
-import com.somesec.crypto.constant.MessagesCode;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
-import com.somesec.crypto.constant.CryptoConstantsEnum;
-import com.somesec.crypto.exception.CryptoOperationException;
+import java.nio.ByteBuffer;
+import java.security.Key;
+import java.security.SecureRandom;
 
 public final class AESEncryption implements EncryptionOperation {
 
@@ -27,11 +25,11 @@ public final class AESEncryption implements EncryptionOperation {
             cipher.init(Cipher.ENCRYPT_MODE, key, spec);
             byte[] cipherText = cipher.doFinal(payload);
             return ByteBuffer.allocate((int) CryptoConstantsEnum.AES_DEFAULT_GCM_NONCE_LENGTH.getValue() + cipherText.length)
-                .put(nonce)
-                .put(cipherText)
-                .array();
+                    .put(nonce)
+                    .put(cipherText)
+                    .array();
         } catch (Exception ex) {
-            throw new CryptoOperationException(MessagesCode.ERROR_ENCRYPTION_ALGO, ex,CryptoConstantsEnum.AES.getValue());
+            throw new CryptoOperationException(MessagesCode.ERROR_ENCRYPTION_ALGO, ex, CryptoConstantsEnum.AES.getValue());
         }
     }
 
