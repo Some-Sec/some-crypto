@@ -1,5 +1,7 @@
 package com.somesec.crypto.key;
 
+import com.somesec.crypto.constant.CryptoAlgorithm;
+
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -10,15 +12,13 @@ import javax.crypto.SecretKey;
 /**
  * KeyService interface used in all other sec-channel components. Utility for key generation and parsing based on default parameters of the implementation.
  */
-public interface KeyService {
+public interface KeyOperation {
 
-    Key getAesKeyForPassphrase(char[] passphrase) throws Exception;
+    Key deriveSecretKey(char[] passphrase, CryptoAlgorithm algorithm) throws Exception;
 
-    KeyPair generateEcKeyPair();
+    KeyPair generateKeyPair(CryptoAlgorithm algorithm);
 
-    KeyPair generateRSAKeyPair();
-
-    Key generateAesKey();
+    Key generateSecretKey();
 
     PrivateKey deserializePrivateKey(String key) throws Exception;
 
@@ -26,7 +26,5 @@ public interface KeyService {
 
     String getKeyFingerprint(Key key) throws Exception;
 
-    Key generateAesKeyFromHkdf(byte[] inputData) throws Exception;
-
-    Key deserializeAESKey(String secret);
+    Key deserializeSecretKey(String secret);
 }
