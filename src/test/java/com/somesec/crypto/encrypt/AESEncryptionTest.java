@@ -1,6 +1,7 @@
 package com.somesec.crypto.encrypt;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.Assert;
 import org.junit.Test;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -22,6 +23,7 @@ public class AESEncryptionTest {
         Security.addProvider(new BouncyCastleProvider());
         Key aesKey = new SecretKeySpec(AES_KEY_256_B64.getBytes(), "AES");
         byte[] encryptedBytes = service.encrypt(PLAIN_TEXT.getBytes(StandardCharsets.UTF_8), aesKey);
+        Assert.assertNotNull(encryptedBytes);
         System.out.println(Base64.getEncoder().encodeToString(encryptedBytes));
     }
 }

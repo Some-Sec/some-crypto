@@ -8,6 +8,7 @@ import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.crypto.params.ECKeyParameters;
 import org.bouncycastle.crypto.params.RSAKeyParameters;
 import org.bouncycastle.crypto.util.PrivateKeyFactory;
+import org.bouncycastle.crypto.util.PublicKeyFactory;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
@@ -101,7 +102,7 @@ public class DefaultKeyOperationImpl implements KeyOperation {
     public PublicKey deserializePublicKey(String key) throws IOException, NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException {
 
         final Base64.Decoder decoder = Base64.getDecoder();
-        final AsymmetricKeyParameter keyParams = PrivateKeyFactory.createKey(decoder.decode(key));
+        final AsymmetricKeyParameter keyParams = PublicKeyFactory.createKey(decoder.decode(key));
         if (keyParams.isPrivate()) {
             throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION, key);
         }
