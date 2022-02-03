@@ -17,7 +17,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.somesec.crypto.exception.CryptoExceptionFactory;
+import com.somesec.crypto.MessagesCode;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.generators.HKDFBytesGenerator;
@@ -45,8 +45,8 @@ public class KeyUtils {
     private static final String AES = "AES";
 
     public static Key generateKeyWithPBKDF2(String keyDerivationAlgorithm, String keyGeneratedAlgorithm, char[] passphrase, int iterationCount, int keyLength,
-        byte[] salt)
-        throws NoSuchAlgorithmException, InvalidKeySpecException {
+                                            byte[] salt)
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
         SecretKeyFactory factory = SecretKeyFactory.getInstance(keyDerivationAlgorithm);
         KeySpec spec = new PBEKeySpec(passphrase, salt, iterationCount, keyLength);
         return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), keyGeneratedAlgorithm);
@@ -55,7 +55,7 @@ public class KeyUtils {
     /**
      * Asymmetric KeyPair generation util.
      *
-     * @param algorithm the algorithm to use to generate the KeyPair
+     * @param algorithm  the algorithm to use to generate the KeyPair
      * @param parameters the KeyGenParameters object containing the parameters needed for the provided algorithm
      * @return the generated KeyPair
      */
@@ -71,22 +71,22 @@ public class KeyUtils {
                     KeyGenEcParameters ecParameters = (KeyGenEcParameters) parameters;
                     ECNamedCurveParameterSpec ecParameterSpec = ECNamedCurveTable.getParameterSpec(ecParameters.getNamedCurve());
                     KeyPairGenerator generator = KeyPairGenerator.getInstance(ECDSA,
-                        BouncyCastleProvider.PROVIDER_NAME);
+                            BouncyCastleProvider.PROVIDER_NAME);
                     generator.initialize(ecParameterSpec, new SecureRandom());
                     return generator.generateKeyPair();
             }
         } catch (ClassCastException e) {
-            throw CryptoExceptionFactory.mismatchedParameters(algorithm, parameters, e);
+            throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_PARAMS_MISMATCH, e, algorithm, parameters.toString());
         } catch (Exception e) {
-            throw CryptoExceptionFactory.keyGenerationException(algorithm, e);
+            throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN, e, algorithm);
         }
-        throw new CryptoOperationException(String.format("Algorithm %s is not supported.", algorithm));
+        throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_ALGO, algorithm);
     }
 
     /**
      * Symmetric Key generation util.
      *
-     * @param algorithm the algorithm to use to generate the Key
+     * @param algorithm  the algorithm to use to generate the Key
      * @param parameters the KeyGenParameters object containing the parameters needed for the provided algorithm
      * @return the generated Key
      */
@@ -101,11 +101,13 @@ public class KeyUtils {
                     return keyGen.generateKey();
             }
         } catch (ClassCastException e) {
-            throw CryptoExceptionFactory.mismatchedParameters(algorithm, parameters, e);
+            throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_PARAMS_MISMATCH, e, algorithm, parameters.toString());
+
         } catch (Exception e) {
-            throw CryptoExceptionFactory.keyGenerationException(algorithm, e);
+            throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN, e, algorithm);
+
         }
-        throw new CryptoOperationException(String.format("Algorithm %s is not supported.", algorithm));
+        throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_ALGO, algorithm);
     }
 
     public static Key deserializeAsymmetricPrivateKey(String b64Key) {
@@ -119,7 +121,7 @@ public class KeyUtils {
                 if (keyParams instanceof RSAKeyParameters) {
                     return KeyFactory.getInstance(RSA, BouncyCastleProvider.PROVIDER_NAME).generatePrivate(keySpecPKCS8);
                 }
-                throw new Exception("Unsupported PrivateKey parameters for key\n" + b64Key);
+                throw new CryptoOperationException("Unsupported PrivateKey parameters for key\n" + b64Key);
             } else {
                 X509EncodedKeySpec keySpecX509 = new X509EncodedKeySpec(Base64.getDecoder().decode(b64Key));
                 if (keyParams instanceof ECKeyParameters) {
@@ -128,10 +130,10 @@ public class KeyUtils {
                 if (keyParams instanceof RSAKeyParameters) {
                     return KeyFactory.getInstance(RSA, BouncyCastleProvider.PROVIDER_NAME).generatePublic(keySpecX509);
                 }
-                throw new Exception("Unsupported PublicKey parameters for key\n" + b64Key);
+                throw new CryptoOperationException("Unsupported PublicKey parameters for key\n" + b64Key);
             }
         } catch (Exception ex) {
-            throw CryptoExceptionFactory.keyDeserializationException(b64Key, ex);
+            throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION, ex, b64Key);
         }
     }
 
@@ -147,7 +149,7 @@ public class KeyUtils {
                 return keyFactory.generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(b64Key)));
             } catch (Exception ex2) {
                 log.error("Could not deserialize PublicKey as RSA.", ex);
-                throw CryptoExceptionFactory.keyDeserializationException(b64Key, ex2);
+                throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION, ex2, b64Key);
             }
         }
     }

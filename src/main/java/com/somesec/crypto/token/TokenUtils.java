@@ -13,7 +13,7 @@ import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.RSADecrypter;
 import com.nimbusds.jose.crypto.RSAEncrypter;
 import com.somesec.crypto.CryptoConstantsEnum;
-import com.somesec.crypto.exception.CryptoExceptionFactory;
+import com.somesec.crypto.MessagesCode;
 import com.somesec.crypto.exception.CryptoOperationException;
 
 public class TokenUtils {
@@ -27,7 +27,7 @@ public class TokenUtils {
                 (RSAPublicKey) KeyFactory.getInstance((String) CryptoConstantsEnum.RSA.getValue()).generatePublic(new X509EncodedKeySpec(publicKey))));
             return jwe.serialize();
         } catch (Exception ex) {
-            throw CryptoExceptionFactory.jweTokenCreationException(ex);
+            throw new CryptoOperationException(MessagesCode.ERROR_JWE_CREATION, ex);
         }
     }
 
@@ -38,7 +38,8 @@ public class TokenUtils {
                 new RSADecrypter(KeyFactory.getInstance((String) CryptoConstantsEnum.RSA.getValue()).generatePrivate(new PKCS8EncodedKeySpec(privKey))));
             return jwe.getPayload().toString();
         } catch (Exception ex) {
-            throw CryptoExceptionFactory.jweTokenDecryptionException(ex);
+            throw new CryptoOperationException(MessagesCode.ERROR_JWE_DECRYPTION, ex);
+
         }
     }
 }
