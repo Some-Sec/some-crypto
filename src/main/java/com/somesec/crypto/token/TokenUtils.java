@@ -24,7 +24,7 @@ public class TokenUtils {
                 new JWEHeader(alg, enc),
                 new Payload(payload));
             jwe.encrypt(new RSAEncrypter(
-                (RSAPublicKey) KeyFactory.getInstance((String) CryptoConstantsEnum.RSA.getValue()).generatePublic(new X509EncodedKeySpec(publicKey))));
+                (RSAPublicKey) KeyFactory.getInstance(CryptoConstantsEnum.RSA.getValue()).generatePublic(new X509EncodedKeySpec(publicKey))));
             return jwe.serialize();
         } catch (Exception ex) {
             throw new CryptoOperationException(MessagesCode.ERROR_JWE_CREATION, ex);
@@ -35,7 +35,7 @@ public class TokenUtils {
         try {
             final JWEObject jwe = JWEObject.parse(payload);
             jwe.decrypt(
-                new RSADecrypter(KeyFactory.getInstance((String) CryptoConstantsEnum.RSA.getValue()).generatePrivate(new PKCS8EncodedKeySpec(privKey))));
+                new RSADecrypter(KeyFactory.getInstance(CryptoConstantsEnum.RSA.getValue()).generatePrivate(new PKCS8EncodedKeySpec(privKey))));
             return jwe.getPayload().toString();
         } catch (Exception ex) {
             throw new CryptoOperationException(MessagesCode.ERROR_JWE_DECRYPTION, ex);

@@ -13,11 +13,11 @@ import java.util.Collections;
 
 public class DecryptionServiceTest {
 
-    private static String AES_KEY_256_B64 = "dSgVkXp2s5v8y/B?E(H+MbQeThWmZq3t";
-    private static String PLAIN_TEXT = "super test";
-    private static String ENCRYPTED_TEXT_B64 = "fWXjhoK0d0tHprnG2mAASE4bI4x7wAXb3mYWwU5jv/NYHgbX6OU=";
+    private static final String AES_KEY_256_B64 = "dSgVkXp2s5v8y/B?E(H+MbQeThWmZq3t";
+    private static final String PLAIN_TEXT = "super test";
+    private static final String ENCRYPTED_TEXT_B64 = "fWXjhoK0d0tHprnG2mAASE4bI4x7wAXb3mYWwU5jv/NYHgbX6OU=";
 
-    private static Base64.Decoder b64Decoder = Base64.getDecoder();
+    private static final Base64.Decoder b64Decoder = Base64.getDecoder();
     private final DecryptionService service = new DecryptionServiceImpl(Collections.singletonList(new AESDecryption()));
 
 
