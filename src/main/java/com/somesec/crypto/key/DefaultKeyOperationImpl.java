@@ -1,7 +1,6 @@
 package com.somesec.crypto.key;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.*;
@@ -79,6 +78,13 @@ public class DefaultKeyOperationImpl implements KeyOperation {
             throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION, key);
         }
         final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decoder.decode(key));
+        final KeyFactory instance = getAsymmetricKeyFactory(key, keyParams);
+        return instance.generatePrivate(keySpec);
+
+
+    }
+
+    private KeyFactory getAsymmetricKeyFactory(String key, AsymmetricKeyParameter keyParams) throws NoSuchAlgorithmException, NoSuchProviderException {
         SupportedAlgorithm algorithm;
         if (keyParams instanceof ECKeyParameters) {
             algorithm = SupportedAlgorithm.ECDSA;
@@ -87,10 +93,7 @@ public class DefaultKeyOperationImpl implements KeyOperation {
         } else {
             throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION_NOT_SUPPORTED, key);
         }
-        final KeyFactory instance = KeyFactory.getInstance(algorithm.name(), BouncyCastleProvider.PROVIDER_NAME);
-        return instance.generatePrivate(keySpec);
-
-
+        return KeyFactory.getInstance(algorithm.name(), BouncyCastleProvider.PROVIDER_NAME);
     }
 
     @Override
@@ -102,19 +105,8 @@ public class DefaultKeyOperationImpl implements KeyOperation {
             throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION, key);
         }
         final X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decoder.decode(key));
-        SupportedAlgorithm algorithm;
-        if (keyParams instanceof ECKeyParameters) {
-            algorithm = SupportedAlgorithm.ECDSA;
-        } else if (keyParams instanceof RSAKeyParameters) {
-            algorithm = SupportedAlgorithm.RSA;
-        } else {
-            throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION_NOT_SUPPORTED, key);
-        }
-        final KeyFactory instance = KeyFactory.getInstance(algorithm.name(), BouncyCastleProvider.PROVIDER_NAME);
+        final KeyFactory instance = getAsymmetricKeyFactory(key, keyParams);
         return instance.generatePublic(keySpec);
-
-
-
 
 
     }
