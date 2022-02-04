@@ -32,12 +32,20 @@ public class ConfigurationResolverImpl implements ConfigurationResolver {
         return getValueFromDefaultConfig(key);
     }
 
+    @Override
+    public <T> T getConfig(final Enum<?> key) {
+        if (key == null) {
+            throw new IllegalArgumentException(MessagesCode.ERROR_KEY_NOT_NULLABLE.getMessage());
+        }
+        return this.getConfig(key.name());
+    }
+
 
     private <T> T getValueFromDefaultConfig(final String key) {
         return Arrays.stream(DefaultConfig.values())
-                .filter(cryptoConstantsEnum -> cryptoConstantsEnum.name().equalsIgnoreCase(key))
+                .filter(configValues -> configValues.name().equalsIgnoreCase(key))
                 .findAny()
-                .orElseThrow(() -> new CryptoOperationException(MessagesCode.ERROR_NO_CONFIGURATION_FOR_KEY,key)).getValue();
+                .orElseThrow(() -> new CryptoOperationException(MessagesCode.ERROR_NO_CONFIGURATION_FOR_KEY, key)).getValue();
     }
 
     private <T> T getFromPropertiesSource(final String key) {
