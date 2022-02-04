@@ -10,8 +10,8 @@ public enum SupportedAlgorithm implements CryptoAlgorithm {
 
     AES {
         @Override
-        public CryptoOperation getCryptoOperation() {
-            return CryptoOperation.SYMMETRIC;
+        public CryptographicType getCryptoOperation() {
+            return CryptographicType.SYMMETRIC;
         }
 
         @Override
@@ -20,8 +20,8 @@ public enum SupportedAlgorithm implements CryptoAlgorithm {
         }
     }, RSA {
         @Override
-        public CryptoOperation getCryptoOperation() {
-            return CryptoOperation.ASYMMETRIC;
+        public CryptographicType getCryptoOperation() {
+            return CryptographicType.ASYMMETRIC;
         }
 
         @Override
@@ -30,8 +30,8 @@ public enum SupportedAlgorithm implements CryptoAlgorithm {
         }
     }, ECDSA {
         @Override
-        public CryptoOperation getCryptoOperation() {
-            return CryptoOperation.ASYMMETRIC;
+        public CryptographicType getCryptoOperation() {
+            return CryptographicType.ASYMMETRIC;
         }
 
         @Override

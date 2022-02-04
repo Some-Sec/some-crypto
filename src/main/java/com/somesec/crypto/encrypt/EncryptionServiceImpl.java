@@ -1,6 +1,6 @@
 package com.somesec.crypto.encrypt;
 
-import com.somesec.crypto.constant.CryptoOperation;
+import com.somesec.crypto.constant.CryptographicType;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -35,7 +35,7 @@ public class EncryptionServiceImpl implements EncryptionService {
 
         return cryptoOperations
                 .stream()
-                .filter(cryptoOperation -> cryptoOperation.getSupportedOperation() == CryptoOperation.fromKey(key))
+                .filter(cryptoOperation -> cryptoOperation.getSupportedOperation() == CryptographicType.fromKey(key))
                 .filter(cryptoOperation -> cryptoOperation.getKeyClass().isAssignableFrom(key.getClass()))
                 .findAny()
                 .orElseThrow(UnsupportedOperationException::new);

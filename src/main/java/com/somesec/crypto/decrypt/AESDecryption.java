@@ -1,7 +1,7 @@
 package com.somesec.crypto.decrypt;
 
 import com.somesec.crypto.constant.CryptoConstantsEnum;
-import com.somesec.crypto.constant.CryptoOperation;
+import com.somesec.crypto.constant.CryptographicType;
 import com.somesec.crypto.constant.MessagesCode;
 import com.somesec.crypto.exception.CryptoOperationException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -25,17 +25,22 @@ public final class AESDecryption implements DecryptionOperation {
             cipher.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec((int) CryptoConstantsEnum.AES_DEFAULT_GCM_TAG_LENGTH_BYTE.getValue() * (int) CryptoConstantsEnum.BIT_IN_A_BYTE.getValue(), iv));
             return cipher.doFinal(cipherText);
         } catch (Exception ex) {
-            throw new CryptoOperationException(MessagesCode.ERROR_DECRYPTION_ALGO, ex, CryptoConstantsEnum.AES.getValue());
+            throw new CryptoOperationException(MessagesCode.ERROR_DECRYPTION_ALGO, ex, getAlgorithmName());
         }
     }
 
     @Override
-    public CryptoOperation getSupportedOperation() {
-        return CryptoOperation.SYMMETRIC;
+    public CryptographicType getSupportedOperation() {
+        return CryptographicType.SYMMETRIC;
     }
 
     @Override
     public Class<? extends Key> getKeyClass() {
         return SecretKey.class;
+    }
+
+    @Override
+    public String getAlgorithmName() {
+        return CryptoConstantsEnum.AES.getValue();
     }
 }

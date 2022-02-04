@@ -4,7 +4,7 @@ import com.somesec.crypto.key.KeyGenParameters;
 
 public interface CryptoAlgorithm {
 
-    CryptoOperation getCryptoOperation();
+    CryptographicType getCryptoOperation();
 
     KeyGenParameters getKeyGenParameters();
 

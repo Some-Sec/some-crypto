@@ -2,7 +2,7 @@ package com.somesec.crypto.key;
 
 import com.somesec.crypto.constant.CryptoAlgorithm;
 import com.somesec.crypto.constant.CryptoConstantsEnum;
-import com.somesec.crypto.constant.CryptoOperation;
+import com.somesec.crypto.constant.CryptographicType;
 import com.somesec.crypto.constant.MessagesCode;
 import com.somesec.crypto.constant.SupportedAlgorithm;
 import com.somesec.crypto.exception.CryptoOperationException;
@@ -44,7 +44,7 @@ public class DefaultKeyOperationImpl implements KeyOperation {
 
     @Override
     public Key deriveSecretKey(char[] passphrase, CryptoAlgorithm algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        if (algorithm.getCryptoOperation() != CryptoOperation.SYMMETRIC) {
+        if (algorithm.getCryptoOperation() != CryptographicType.SYMMETRIC) {
             throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_ALGO, algorithm.name());
         }
         if (algorithm.getKeyGenParameters() instanceof KeyGenAesParameters) {
@@ -58,7 +58,7 @@ public class DefaultKeyOperationImpl implements KeyOperation {
 
     @Override
     public KeyPair generateKeyPair(CryptoAlgorithm algorithm) throws NoSuchProviderException, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
-        if (algorithm.getCryptoOperation() != CryptoOperation.ASYMMETRIC) {
+        if (algorithm.getCryptoOperation() != CryptographicType.ASYMMETRIC) {
             throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_ALGO, algorithm.name());
         }
         final KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm.name(), BouncyCastleProvider.PROVIDER_NAME);

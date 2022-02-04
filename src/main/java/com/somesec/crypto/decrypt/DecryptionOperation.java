@@ -1,13 +1,11 @@
 package com.somesec.crypto.decrypt;
 
-import com.somesec.crypto.constant.CryptoOperation;
+import com.somesec.crypto.CryptographicOperation;
 
 import java.security.Key;
 
-public interface DecryptionOperation {
+public interface DecryptionOperation extends CryptographicOperation {
     byte[] decrypt(byte[] cypheredBytes, Key key);
 
-    CryptoOperation getSupportedOperation();
 
-    Class<? extends Key> getKeyClass();
 }
