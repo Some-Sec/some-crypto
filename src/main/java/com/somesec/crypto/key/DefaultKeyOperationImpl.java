@@ -1,7 +1,7 @@
 package com.somesec.crypto.key;
 
 import com.somesec.crypto.constant.CryptoAlgorithm;
-import com.somesec.crypto.constant.CryptoConstantsEnum;
+import com.somesec.crypto.constant.CryptoConstants;
 import com.somesec.crypto.constant.CryptographicType;
 import com.somesec.crypto.constant.MessagesCode;
 import com.somesec.crypto.constant.SupportedAlgorithm;
@@ -48,9 +48,9 @@ public class DefaultKeyOperationImpl implements KeyOperation {
             throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_ALGO, algorithm.name());
         }
         if (algorithm.getKeyGenParameters() instanceof KeyGenAesParameters) {
-            final SecretKeyFactory factory = SecretKeyFactory.getInstance(CryptoConstantsEnum.KEY_DEFAULT_PBKDF2_FACTORY.getValue());
-            final KeySpec spec = new PBEKeySpec(passphrase, CryptoConstantsEnum.KEY_DEFAULT_32_BYTE_SALT.getValue(), CryptoConstantsEnum.KEY_DEFAULT_PBKDF2_ITERATION.getValue(), CryptoConstantsEnum.KEY_DEFAULT_AES_KEY_SIZE.getValue());
-            return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), CryptoConstantsEnum.KEY_DEFAULT_SYMMETRIC_KEY_ALGORITHM.getValue());
+            final SecretKeyFactory factory = SecretKeyFactory.getInstance(CryptoConstants.KEY_DEFAULT_PBKDF2_FACTORY.getValue());
+            final KeySpec spec = new PBEKeySpec(passphrase, CryptoConstants.KEY_DEFAULT_32_BYTE_SALT.getValue(), CryptoConstants.KEY_DEFAULT_PBKDF2_ITERATION.getValue(), CryptoConstants.KEY_DEFAULT_AES_KEY_SIZE.getValue());
+            return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), CryptoConstants.KEY_DEFAULT_SYMMETRIC_KEY_ALGORITHM.getValue());
         }
         throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_ALGO, algorithm.name());
 
@@ -77,7 +77,7 @@ public class DefaultKeyOperationImpl implements KeyOperation {
 
     @Override
     public Key generateSecretKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        byte[] seed = new byte[(int) CryptoConstantsEnum.KEY_DEFAULT_AES_KEY_SIZE.getValue()];
+        byte[] seed = new byte[(int) CryptoConstants.KEY_DEFAULT_AES_KEY_SIZE.getValue()];
         final SecureRandom rnd = SecureRandom.getInstanceStrong();
         rnd.nextBytes(seed);
         return this.deriveSecretKey(new String(seed, StandardCharsets.UTF_8).toCharArray(), SupportedAlgorithm.AES);

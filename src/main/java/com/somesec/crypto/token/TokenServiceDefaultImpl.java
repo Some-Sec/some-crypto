@@ -5,7 +5,7 @@ import com.nimbusds.jose.JWEObject;
 import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.RSADecrypter;
 import com.nimbusds.jose.crypto.RSAEncrypter;
-import com.somesec.crypto.constant.CryptoConstantsEnum;
+import com.somesec.crypto.constant.CryptoConstants;
 import com.somesec.crypto.key.KeyOperation;
 
 import java.security.interfaces.RSAPublicKey;
@@ -23,7 +23,7 @@ public class TokenServiceDefaultImpl implements TokenService {
     @Override
     public String createJWE(String payload, byte[] publicKey) throws Exception {
         final JWEObject jwe = new JWEObject(
-                new JWEHeader(CryptoConstantsEnum.TOKEN_DEFAULT_ALGORITHM.getValue(), CryptoConstantsEnum.TOKEN_DEFAULT_ENCRYPTION_METHOD.getValue()),
+                new JWEHeader(CryptoConstants.TOKEN_DEFAULT_ALGORITHM.getValue(), CryptoConstants.TOKEN_DEFAULT_ENCRYPTION_METHOD.getValue()),
                 new Payload(payload));
         jwe.encrypt(new RSAEncrypter(
                 (RSAPublicKey) keyOperation.deserializePublicKey(Base64.getEncoder().encodeToString(publicKey))));

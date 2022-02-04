@@ -1,6 +1,6 @@
 package com.somesec.crypto.decrypt;
 
-import com.somesec.crypto.constant.CryptoConstantsEnum;
+import com.somesec.crypto.constant.CryptoConstants;
 import com.somesec.crypto.constant.CryptographicType;
 import com.somesec.crypto.constant.MessagesCode;
 import com.somesec.crypto.exception.CryptoOperationException;
@@ -16,13 +16,13 @@ public final class AESDecryption implements DecryptionOperation {
     @Override
     public byte[] decrypt(byte[] bytes, Key key) {
         try {
-            Cipher cipher = Cipher.getInstance(CryptoConstantsEnum.AES_CIPHER.getValue(), BouncyCastleProvider.PROVIDER_NAME);
+            Cipher cipher = Cipher.getInstance(CryptoConstants.AES_CIPHER.getValue(), BouncyCastleProvider.PROVIDER_NAME);
             ByteBuffer bb = ByteBuffer.wrap(bytes);
-            byte[] iv = new byte[(int) CryptoConstantsEnum.AES_DEFAULT_GCM_NONCE_LENGTH.getValue()];
+            byte[] iv = new byte[(int) CryptoConstants.AES_DEFAULT_GCM_NONCE_LENGTH.getValue()];
             bb.get(iv);
             byte[] cipherText = new byte[bb.remaining()];
             bb.get(cipherText);
-            cipher.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec((int) CryptoConstantsEnum.AES_DEFAULT_GCM_TAG_LENGTH_BYTE.getValue() * (int) CryptoConstantsEnum.BIT_IN_A_BYTE.getValue(), iv));
+            cipher.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec((int) CryptoConstants.AES_DEFAULT_GCM_TAG_LENGTH_BYTE.getValue() * (int) CryptoConstants.BIT_IN_A_BYTE.getValue(), iv));
             return cipher.doFinal(cipherText);
         } catch (Exception ex) {
             throw new CryptoOperationException(MessagesCode.ERROR_DECRYPTION_ALGO, ex, getAlgorithmName());
@@ -41,6 +41,6 @@ public final class AESDecryption implements DecryptionOperation {
 
     @Override
     public String getAlgorithmName() {
-        return CryptoConstantsEnum.AES.getValue();
+        return CryptoConstants.AES.getValue();
     }
 }

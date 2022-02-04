@@ -7,7 +7,7 @@ import org.bouncycastle.crypto.digests.SHA256Digest;
 /**
  * Cryptography constants that will be used as the default parameters in Encryption/Decryption operations if no arguments are provided.
  */
-public enum CryptoConstantsEnum implements Constant {
+public enum CryptoConstants implements Constant {
     RSA("RSA"),
     ECDSA("ECDSA"),
     AES("AES"),
@@ -31,7 +31,7 @@ public enum CryptoConstantsEnum implements Constant {
 
     private final Object value;
 
-    CryptoConstantsEnum(Object value) {
+    CryptoConstants(Object value) {
         this.value = value;
     }
 

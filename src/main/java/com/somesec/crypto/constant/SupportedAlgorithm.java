@@ -16,7 +16,7 @@ public enum SupportedAlgorithm implements CryptoAlgorithm {
 
         @Override
         public KeyGenParameters getKeyGenParameters() {
-            return new KeyGenAesParameters(CryptoConstantsEnum.KEY_DEFAULT_AES_KEY_SIZE.getValue());
+            return new KeyGenAesParameters(CryptoConstants.KEY_DEFAULT_AES_KEY_SIZE.getValue());
         }
     }, RSA {
         @Override
@@ -26,7 +26,7 @@ public enum SupportedAlgorithm implements CryptoAlgorithm {
 
         @Override
         public KeyGenParameters getKeyGenParameters() {
-            return new KeyGenRsaParameters(CryptoConstantsEnum.KEY_DEFAULT_RSA_SIZE.getValue());
+            return new KeyGenRsaParameters(CryptoConstants.KEY_DEFAULT_RSA_SIZE.getValue());
         }
     }, ECDSA {
         @Override
@@ -36,7 +36,7 @@ public enum SupportedAlgorithm implements CryptoAlgorithm {
 
         @Override
         public KeyGenParameters getKeyGenParameters() {
-            return new KeyGenEcParameters(CryptoConstantsEnum.KEY_DEFAULT_ECDSA_CURVE_NAME.getValue());
+            return new KeyGenEcParameters(CryptoConstants.KEY_DEFAULT_ECDSA_CURVE_NAME.getValue());
         }
     };
 
