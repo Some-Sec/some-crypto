@@ -1,7 +1,5 @@
 package com.somesec.crypto.token;
 
-import java.text.ParseException;
-
 public interface TokenService {
 
     String createJWE(String payload, byte[] publicKey) throws Exception;
