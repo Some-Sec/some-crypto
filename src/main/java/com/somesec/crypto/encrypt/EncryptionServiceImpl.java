@@ -9,7 +9,7 @@ import java.util.List;
 
 public class EncryptionServiceImpl implements EncryptionService {
 
-    private final static Base64.Encoder B_64_ENCODER = Base64.getEncoder();
+    private static final Base64.Encoder B_64_ENCODER = Base64.getEncoder();
 
     private final List<EncryptionOperation> cryptoOperations;
 

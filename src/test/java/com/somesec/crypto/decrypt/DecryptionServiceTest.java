@@ -1,5 +1,6 @@
 package com.somesec.crypto.decrypt;
 
+import com.somesec.crypto.config.ConfigurationResolverImpl;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,7 +19,7 @@ public class DecryptionServiceTest {
     private static final String ENCRYPTED_TEXT_B64 = "fWXjhoK0d0tHprnG2mAASE4bI4x7wAXb3mYWwU5jv/NYHgbX6OU=";
 
     private static final Base64.Decoder b64Decoder = Base64.getDecoder();
-    private final DecryptionService service = new DecryptionServiceImpl(Collections.singletonList(new AESDecryption()));
+    private final DecryptionService service = new DecryptionServiceImpl(Collections.singletonList(new AESDecryption(new ConfigurationResolverImpl())));
 
 
     @Test

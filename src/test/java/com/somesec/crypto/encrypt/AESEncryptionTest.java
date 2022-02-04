@@ -1,5 +1,6 @@
 package com.somesec.crypto.encrypt;
 
+import com.somesec.crypto.config.ConfigurationResolverImpl;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,7 +17,7 @@ public class AESEncryptionTest {
     private static final String AES_KEY_256_B64 = "dSgVkXp2s5v8y/B?E(H+MbQeThWmZq3t";
     private static final String PLAIN_TEXT = "super test";
 
-    private final EncryptionService service = new EncryptionServiceImpl(Collections.singletonList(new AESEncryption()));
+    private final EncryptionService service = new EncryptionServiceImpl(Collections.singletonList(new AESEncryption(new ConfigurationResolverImpl())));
 
     @Test
     public void aesSymmetricEncryptTest() throws Exception {

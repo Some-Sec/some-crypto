@@ -14,7 +14,7 @@ public enum MessagesCode {
     ERROR_JWE_DECRYPTION("Could not decrypt JWE token"),
 
 
-    ;
+    ERROR_NO_CONFIGURATION_FOR_KEY("Could not find any configuration property associated to key: %s ");
 
     private final String message;
 

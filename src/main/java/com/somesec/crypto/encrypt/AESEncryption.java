@@ -1,6 +1,7 @@
 package com.somesec.crypto.encrypt;
 
-import com.somesec.crypto.constant.CryptoConstants;
+import com.somesec.crypto.config.ConfigurationResolver;
+import com.somesec.crypto.config.DefaultConfig;
 import com.somesec.crypto.constant.CryptographicType;
 import com.somesec.crypto.constant.MessagesCode;
 import com.somesec.crypto.exception.CryptoOperationException;
@@ -15,16 +16,22 @@ import java.security.SecureRandom;
 
 public final class AESEncryption implements EncryptionOperation {
 
+    private final ConfigurationResolver resolver;
+
+    public AESEncryption(final ConfigurationResolver resolver) {
+        this.resolver = resolver;
+    }
+
     public byte[] encrypt(byte[] payload, Key key) {
         try {
-            Cipher cipher = Cipher.getInstance(CryptoConstants.AES_CIPHER.getValue(), BouncyCastleProvider.PROVIDER_NAME);
+            Cipher cipher = Cipher.getInstance(resolver.getConfig(DefaultConfig.AES_CIPHER_NAME), BouncyCastleProvider.PROVIDER_NAME);
             SecureRandom random = SecureRandom.getInstanceStrong();
-            final byte[] nonce = new byte[(int) CryptoConstants.AES_DEFAULT_GCM_NONCE_LENGTH.getValue()];
+            final byte[] nonce = new byte[(int) resolver.getConfig(DefaultConfig.AES_GCM_NONCE_LENGTH)];
             random.nextBytes(nonce);
-            GCMParameterSpec spec = new GCMParameterSpec((int) CryptoConstants.AES_DEFAULT_GCM_TAG_LENGTH_BYTE.getValue() * ((int) CryptoConstants.BIT_IN_A_BYTE.getValue()), nonce);
+            GCMParameterSpec spec = new GCMParameterSpec((int) resolver.getConfig(DefaultConfig.AES_GCM_TAG_LENGTH_BYTE) * ((int) resolver.getConfig(DefaultConfig.BIT_IN_A_BYTE)), nonce);
             cipher.init(Cipher.ENCRYPT_MODE, key, spec);
             byte[] cipherText = cipher.doFinal(payload);
-            return ByteBuffer.allocate((int) CryptoConstants.AES_DEFAULT_GCM_NONCE_LENGTH.getValue() + cipherText.length)
+            return ByteBuffer.allocate((int) resolver.getConfig(DefaultConfig.AES_GCM_NONCE_LENGTH) + cipherText.length)
                     .put(nonce)
                     .put(cipherText)
                     .array();
@@ -46,6 +53,6 @@ public final class AESEncryption implements EncryptionOperation {
 
     @Override
     public String getAlgorithmName() {
-        return CryptoConstants.AES.getValue();
+        return resolver.getConfig(DefaultConfig.AES_ALGORITHM_NAME);
     }
 }

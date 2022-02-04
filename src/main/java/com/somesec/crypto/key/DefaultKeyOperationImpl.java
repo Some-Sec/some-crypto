@@ -1,7 +1,8 @@
 package com.somesec.crypto.key;
 
+import com.somesec.crypto.config.ConfigurationResolver;
+import com.somesec.crypto.config.DefaultConfig;
 import com.somesec.crypto.constant.CryptoAlgorithm;
-import com.somesec.crypto.constant.CryptoConstants;
 import com.somesec.crypto.constant.CryptographicType;
 import com.somesec.crypto.constant.MessagesCode;
 import com.somesec.crypto.constant.SupportedAlgorithm;
@@ -41,16 +42,21 @@ import java.util.Base64;
 
 public class DefaultKeyOperationImpl implements KeyOperation {
 
+    private final ConfigurationResolver resolver;
+
+    public DefaultKeyOperationImpl(final ConfigurationResolver resolver) {
+        this.resolver = resolver;
+    }
 
     @Override
     public Key deriveSecretKey(char[] passphrase, CryptoAlgorithm algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException {
         if (algorithm.getCryptoOperation() != CryptographicType.SYMMETRIC) {
             throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_ALGO, algorithm.name());
         }
-        if (algorithm.getKeyGenParameters() instanceof KeyGenAesParameters) {
-            final SecretKeyFactory factory = SecretKeyFactory.getInstance(CryptoConstants.KEY_DEFAULT_PBKDF2_FACTORY.getValue());
-            final KeySpec spec = new PBEKeySpec(passphrase, CryptoConstants.KEY_DEFAULT_32_BYTE_SALT.getValue(), CryptoConstants.KEY_DEFAULT_PBKDF2_ITERATION.getValue(), CryptoConstants.KEY_DEFAULT_AES_KEY_SIZE.getValue());
-            return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), CryptoConstants.KEY_DEFAULT_SYMMETRIC_KEY_ALGORITHM.getValue());
+        if (algorithm == SupportedAlgorithm.AES) {
+            final SecretKeyFactory factory = SecretKeyFactory.getInstance(resolver.getConfig(DefaultConfig.KEY_PBKDF2_FACTORY));
+            final KeySpec spec = new PBEKeySpec(passphrase, resolver.getConfig(DefaultConfig.SALT), resolver.getConfig(DefaultConfig.PBKDF2_ITERATION), resolver.getConfig(DefaultConfig.SYMMETRIC_KEY_SIZE));
+            return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), resolver.getConfig(DefaultConfig.SYMMETRIC_KEY_ALGORITHM));
         }
         throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_ALGO, algorithm.name());
 
@@ -63,10 +69,9 @@ public class DefaultKeyOperationImpl implements KeyOperation {
         }
         final KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm.name(), BouncyCastleProvider.PROVIDER_NAME);
         if (algorithm == SupportedAlgorithm.RSA) {
-            keyGen.initialize(((KeyGenRsaParameters) algorithm.getKeyGenParameters()).getKeySize());
+            keyGen.initialize(resolver.getConfig(DefaultConfig.RSA_KEY_SIZE));
         } else if (algorithm == SupportedAlgorithm.ECDSA) {
-            final String curve = ((KeyGenEcParameters) algorithm.getKeyGenParameters()).getNamedCurve();
-            final ECNamedCurveParameterSpec ecParameterSpec = ECNamedCurveTable.getParameterSpec(curve);
+            final ECNamedCurveParameterSpec ecParameterSpec = ECNamedCurveTable.getParameterSpec(resolver.getConfig(DefaultConfig.ECDSA_CURVE_NAME));
             keyGen.initialize(ecParameterSpec, SecureRandom.getInstanceStrong());
         } else {
             throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_ALGO, algorithm.name());
@@ -77,7 +82,7 @@ public class DefaultKeyOperationImpl implements KeyOperation {
 
     @Override
     public Key generateSecretKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        byte[] seed = new byte[(int) CryptoConstants.KEY_DEFAULT_AES_KEY_SIZE.getValue()];
+        byte[] seed = new byte[(int) resolver.getConfig(DefaultConfig.SYMMETRIC_KEY_SIZE)];
         final SecureRandom rnd = SecureRandom.getInstanceStrong();
         rnd.nextBytes(seed);
         return this.deriveSecretKey(new String(seed, StandardCharsets.UTF_8).toCharArray(), SupportedAlgorithm.AES);

@@ -1,5 +1,6 @@
 package com.somesec.crypto.key;
 
+import com.somesec.crypto.config.ConfigurationResolverImpl;
 import com.somesec.crypto.constant.SupportedAlgorithm;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class KeyOperationTest {
 
-    private final KeyOperation operation = new DefaultKeyOperationImpl();
+    private final KeyOperation operation = new DefaultKeyOperationImpl(new ConfigurationResolverImpl());
 
     static {
         Security.addProvider(new BouncyCastleProvider());
