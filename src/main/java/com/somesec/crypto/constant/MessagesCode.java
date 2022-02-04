@@ -1,7 +1,8 @@
 package com.somesec.crypto.constant;
 
 public enum MessagesCode {
-
+    ERROR_KEY_NOT_NULLABLE("Key can not be null"),
+    ERROR_KEY_TYPE_NOT_SUPPORTED("KeyType [%s] not supported"),
     ERROR_KEY_GEN("Error during %s KeyPair generation."),
     ERROR_KEY_GEN_ALGO("Algorithm %s is not supported."),
     ERROR_KEY_GEN_PARAMS_MISMATCH("Mismatched parameters for KeyGeneration :\nAlgorithm:%s\nParameters:%s"),

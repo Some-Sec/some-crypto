@@ -8,15 +8,17 @@ public enum CryptoOperation {
     SYMMETRIC, ASYMMETRIC;
 
 
-    private static final String KEY_TYPE_NOT_SUPPORTED = "KeyType [%s] not supported";
 
     public static CryptoOperation fromKey(Key key) {
+        if (key == null) {
+            throw new IllegalArgumentException(MessagesCode.ERROR_KEY_NOT_NULLABLE.getMessage());
+        }
         if (key instanceof PrivateKey) {
             return CryptoOperation.ASYMMETRIC;
         } else if (key instanceof SecretKey) {
             return CryptoOperation.SYMMETRIC;
         } else {
-            throw new IllegalArgumentException(String.format(KEY_TYPE_NOT_SUPPORTED, key.getClass().getSimpleName()));
+            throw new IllegalArgumentException(MessagesCode.ERROR_KEY_TYPE_NOT_SUPPORTED.getMessage(key.getClass().getSimpleName()));
         }
     }
 }
