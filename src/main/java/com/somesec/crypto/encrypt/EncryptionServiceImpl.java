@@ -35,8 +35,8 @@ public class EncryptionServiceImpl implements EncryptionService {
 
         return cryptoOperations
                 .stream()
-                .filter(decryptionOperation -> decryptionOperation.getSupportedOperation() == CryptoOperation.fromKey(key))
-                .filter(decryptionOperation -> decryptionOperation.getKeyClass().isAssignableFrom(key.getClass()))
+                .filter(cryptoOperation -> cryptoOperation.getSupportedOperation() == CryptoOperation.fromKey(key))
+                .filter(cryptoOperation -> cryptoOperation.getKeyClass().isAssignableFrom(key.getClass()))
                 .findAny()
                 .orElseThrow(UnsupportedOperationException::new);
 
