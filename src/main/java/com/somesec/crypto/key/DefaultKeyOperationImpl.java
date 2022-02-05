@@ -50,7 +50,7 @@ public class DefaultKeyOperationImpl implements KeyOperation {
 
     @Override
     public Key deriveSecretKey(char[] passphrase, CryptoAlgorithm algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        if (algorithm.getCryptoOperation() != CryptographicType.SYMMETRIC) {
+        if (algorithm.getCryptographicType() != CryptographicType.SYMMETRIC) {
             throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_ALGO, algorithm.name());
         }
         if (algorithm == SupportedAlgorithm.AES) {
@@ -64,7 +64,7 @@ public class DefaultKeyOperationImpl implements KeyOperation {
 
     @Override
     public KeyPair generateKeyPair(CryptoAlgorithm algorithm) throws NoSuchProviderException, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
-        if (algorithm.getCryptoOperation() != CryptographicType.ASYMMETRIC) {
+        if (algorithm.getCryptographicType() != CryptographicType.ASYMMETRIC) {
             throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_ALGO, algorithm.name());
         }
         final KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm.name(), BouncyCastleProvider.PROVIDER_NAME);

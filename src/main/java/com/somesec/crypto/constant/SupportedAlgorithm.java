@@ -5,19 +5,19 @@ public enum SupportedAlgorithm implements CryptoAlgorithm {
 
     AES {
         @Override
-        public CryptographicType getCryptoOperation() {
+        public CryptographicType getCryptographicType() {
             return CryptographicType.SYMMETRIC;
         }
 
     }, RSA {
         @Override
-        public CryptographicType getCryptoOperation() {
+        public CryptographicType getCryptographicType() {
             return CryptographicType.ASYMMETRIC;
         }
 
     }, ECDSA {
         @Override
-        public CryptographicType getCryptoOperation() {
+        public CryptographicType getCryptographicType() {
             return CryptographicType.ASYMMETRIC;
         }
 
