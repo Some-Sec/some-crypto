@@ -1,2 +1,2 @@
-# sec-channel-crypto
-Crypto library used in sec-channel other components
+# some-sec-crypto
+Crypto library used in some-sec other components
