@@ -61,8 +61,6 @@ If you implement your own property source the values looked up from there will t
     ECDSA_CURVE_NAME("prime192v1"),
     RSA_KEY_SIZE(2048),
     BIT_IN_A_BYTE(8),
-    TOKEN_ALGORITHM(JWEAlgorithm.RSA_OAEP_256),
-    TOKEN_ENCRYPTION_METHOD(EncryptionMethod.A256GCM);
 
 ```
 
