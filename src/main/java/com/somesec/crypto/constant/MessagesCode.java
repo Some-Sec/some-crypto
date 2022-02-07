@@ -15,6 +15,9 @@ public enum MessagesCode {
     ERROR_JOSE_PROVIDER_CREATION("Could not create the expected JOSEProvider"),
     ERROR_JWE_CREATION("Could not create JWE token"),
     ERROR_JWE_DECRYPTION("Could not decrypt JWE token"),
+    ERROR_JWS_PARSING_FAILED("Could not parse JWS"),
+    ERROR_JWS_INTEGRITY_CHECK_FAILED("Integrity check (signature check) failed on token"),
+
     ERROR_JWS_SIGNING("Could not sign JWS"),
 
     ERROR_NO_CONFIGURATION_FOR_KEY("Could not find any configuration property associated to key: [%s]"),

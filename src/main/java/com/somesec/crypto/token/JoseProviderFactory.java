@@ -9,7 +9,7 @@ import com.nimbusds.jose.JWSVerifier;
 
 import java.security.Key;
 
-interface JoseProviderFactory {
+public interface JoseProviderFactory {
 
 
     JWEEncrypter getEncrypter(Key key);

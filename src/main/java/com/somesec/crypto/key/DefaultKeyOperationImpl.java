@@ -74,7 +74,7 @@ public class DefaultKeyOperationImpl implements KeyOperation {
         try {
             final KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm.name(), BouncyCastleProvider.PROVIDER_NAME);
             if (algorithm == SupportedAlgorithm.RSA) {
-                keyGen.initialize(resolver.getConfig(DefaultConfig.RSA_KEY_SIZE));
+                keyGen.initialize((int) resolver.getConfig(DefaultConfig.RSA_KEY_SIZE));
             } else if (algorithm == SupportedAlgorithm.ECDSA) {
                 final ECNamedCurveParameterSpec ecParameterSpec = ECNamedCurveTable.getParameterSpec(resolver.getConfig(DefaultConfig.ECDSA_CURVE_NAME));
                 keyGen.initialize(ecParameterSpec, SecureRandom.getInstanceStrong());
@@ -148,7 +148,7 @@ public class DefaultKeyOperationImpl implements KeyOperation {
             final KeyFactory instance = getAsymmetricKeyFactory(keyParams);
             return instance.generatePublic(keySpec);
         } catch (NoSuchAlgorithmException | IOException | NoSuchProviderException | InvalidKeySpecException e) {
-            throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION,e);
+            throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION, e);
         }
 
     }
