@@ -12,6 +12,8 @@ import com.somesec.crypto.constant.MessagesCode;
 import com.somesec.crypto.exception.CryptoOperationException;
 
 import java.security.Key;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.stream.Stream;
 
 final class JoseProviderFactoryImpl implements JoseProviderFactory {
@@ -20,6 +22,9 @@ final class JoseProviderFactoryImpl implements JoseProviderFactory {
     @Override
     public JWEEncrypter getEncrypter(final Key key) {
         doKeyNullCheck(key);
+        if (key instanceof PrivateKey) {
+            throw new CryptoOperationException(MessagesCode.ERROR_KEY_TYPE_NOT_SUPPORTED, PrivateKey.class.getSimpleName());
+        }
         final JWCryptographicAlgorithm algo = findAlgorithmByKey(key);
         try {
             return algo.getEncrypter(key);
@@ -31,6 +36,9 @@ final class JoseProviderFactoryImpl implements JoseProviderFactory {
     @Override
     public JWEDecrypter getDecrypter(final Key key) {
         doKeyNullCheck(key);
+        if (key instanceof PublicKey) {
+            throw new CryptoOperationException(MessagesCode.ERROR_KEY_TYPE_NOT_SUPPORTED, PublicKey.class.getSimpleName());
+        }
         final JWCryptographicAlgorithm algo = findAlgorithmByKey(key);
         try {
             return algo.getDecrypter(key);
@@ -43,7 +51,9 @@ final class JoseProviderFactoryImpl implements JoseProviderFactory {
     @Override
     public JWSSigner getSigner(final Key key) {
         doKeyNullCheck(key);
-
+        if (key instanceof PublicKey) {
+            throw new CryptoOperationException(MessagesCode.ERROR_KEY_TYPE_NOT_SUPPORTED, PublicKey.class.getSimpleName());
+        }
         final JWCryptographicAlgorithm algo = findAlgorithmByKey(key);
         try {
             return algo.getSigner(key);
@@ -55,7 +65,9 @@ final class JoseProviderFactoryImpl implements JoseProviderFactory {
     @Override
     public JWSVerifier getVerifier(final Key key) {
         doKeyNullCheck(key);
-
+        if (key instanceof PrivateKey) {
+            throw new CryptoOperationException(MessagesCode.ERROR_KEY_TYPE_NOT_SUPPORTED, PrivateKey.class.getSimpleName());
+        }
         final JWCryptographicAlgorithm algo = findAlgorithmByKey(key);
         try {
             return algo.getVerifier(key);
@@ -68,12 +80,14 @@ final class JoseProviderFactoryImpl implements JoseProviderFactory {
     public Builder getJWEHeaderBuilder(final Key key) {
         doKeyNullCheck(key);
         final JWCryptographicAlgorithm algo = findAlgorithmByKey(key);
-        return new JWEHeader.Builder((JWEHeader) algo.getEncryptionHeader());
+        return new JWEHeader.Builder(algo.getEncryptionHeader());
     }
 
     @Override
     public JWSHeader.Builder getJWSHeaderBuilder(final Key key) {
-        return null;
+        doKeyNullCheck(key);
+        final JWCryptographicAlgorithm algo = findAlgorithmByKey(key);
+        return new JWSHeader.Builder(algo.getSignatureHeader());
     }
 
     private void doKeyNullCheck(final Key key) {

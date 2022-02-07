@@ -109,7 +109,7 @@ enum JWCryptographicAlgorithm {
 
         @Override
         protected JWSHeader getSignatureHeader() {
-            return new JWSHeader(JWSAlgorithm.ES256);
+            return new JWSHeader(JWSAlgorithm.ES384);
         }
 
         @Override
