@@ -49,85 +49,107 @@ public class DefaultKeyOperationImpl implements KeyOperation {
     }
 
     @Override
-    public Key deriveSecretKey(char[] passphrase, CryptoAlgorithm algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public Key deriveSecretKey(char[] passphrase, CryptoAlgorithm algorithm) {
         if (algorithm.getCryptographicType() != CryptographicType.SYMMETRIC) {
             throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_ALGO, algorithm.name());
         }
         if (algorithm == SupportedAlgorithm.AES) {
-            final SecretKeyFactory factory = SecretKeyFactory.getInstance(resolver.getConfig(DefaultConfig.KEY_PBKDF2_FACTORY));
-            final KeySpec spec = new PBEKeySpec(passphrase, resolver.getConfig(DefaultConfig.SALT), resolver.getConfig(DefaultConfig.PBKDF2_ITERATION), resolver.getConfig(DefaultConfig.SYMMETRIC_KEY_SIZE));
-            return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), resolver.getConfig(DefaultConfig.SYMMETRIC_KEY_ALGORITHM));
+            try {
+                final SecretKeyFactory factory = SecretKeyFactory.getInstance(resolver.getConfig(DefaultConfig.KEY_PBKDF2_FACTORY));
+                final KeySpec spec = new PBEKeySpec(passphrase, resolver.getConfig(DefaultConfig.SALT), resolver.getConfig(DefaultConfig.PBKDF2_ITERATION), resolver.getConfig(DefaultConfig.SYMMETRIC_KEY_SIZE));
+                return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), resolver.getConfig(DefaultConfig.SYMMETRIC_KEY_ALGORITHM));
+            } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+                throw new CryptoOperationException(MessagesCode.ERROR_KEY_DERIVATION, e);
+            }
         }
         throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_ALGO, algorithm.name());
 
     }
 
     @Override
-    public KeyPair generateKeyPair(CryptoAlgorithm algorithm) throws NoSuchProviderException, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+    public KeyPair generateKeyPair(CryptoAlgorithm algorithm) {
         if (algorithm.getCryptographicType() != CryptographicType.ASYMMETRIC) {
             throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_ALGO, algorithm.name());
         }
-        final KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm.name(), BouncyCastleProvider.PROVIDER_NAME);
-        if (algorithm == SupportedAlgorithm.RSA) {
-            keyGen.initialize(resolver.getConfig(DefaultConfig.RSA_KEY_SIZE));
-        } else if (algorithm == SupportedAlgorithm.ECDSA) {
-            final ECNamedCurveParameterSpec ecParameterSpec = ECNamedCurveTable.getParameterSpec(resolver.getConfig(DefaultConfig.ECDSA_CURVE_NAME));
-            keyGen.initialize(ecParameterSpec, SecureRandom.getInstanceStrong());
-        } else {
-            throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_ALGO, algorithm.name());
+        try {
+            final KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm.name(), BouncyCastleProvider.PROVIDER_NAME);
+            if (algorithm == SupportedAlgorithm.RSA) {
+                keyGen.initialize(resolver.getConfig(DefaultConfig.RSA_KEY_SIZE));
+            } else if (algorithm == SupportedAlgorithm.ECDSA) {
+                final ECNamedCurveParameterSpec ecParameterSpec = ECNamedCurveTable.getParameterSpec(resolver.getConfig(DefaultConfig.ECDSA_CURVE_NAME));
+                keyGen.initialize(ecParameterSpec, SecureRandom.getInstanceStrong());
+            } else {
+                throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN_ALGO, algorithm.name());
+            }
+            return keyGen.generateKeyPair();
+        } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException e) {
+            throw new CryptoOperationException(MessagesCode.ERROR_KEY_GEN, e, algorithm.name());
         }
-        return keyGen.generateKeyPair();
+
 
     }
 
     @Override
-    public Key generateSecretKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        byte[] seed = new byte[(int) resolver.getConfig(DefaultConfig.SYMMETRIC_KEY_SIZE)];
-        final SecureRandom rnd = SecureRandom.getInstanceStrong();
-        rnd.nextBytes(seed);
-        return this.deriveSecretKey(new String(seed, StandardCharsets.UTF_8).toCharArray(), SupportedAlgorithm.AES);
+    public Key generateSecretKey() {
+        try {
+            byte[] seed = new byte[(int) resolver.getConfig(DefaultConfig.SYMMETRIC_KEY_SIZE)];
+            final SecureRandom rnd = SecureRandom.getInstanceStrong();
+            rnd.nextBytes(seed);
+            return this.deriveSecretKey(new String(seed, StandardCharsets.UTF_8).toCharArray(), SupportedAlgorithm.AES);
+        } catch (NoSuchAlgorithmException e) {
+            throw new CryptoOperationException(MessagesCode.ERROR_KEY_DERIVATION, e);
+        }
+
     }
 
 
     @Override
-    public PrivateKey deserializePrivateKey(String key) throws IOException, NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException {
-
-        final Base64.Decoder decoder = Base64.getDecoder();
-        final AsymmetricKeyParameter keyParams = PrivateKeyFactory.createKey(decoder.decode(key));
-        if (!keyParams.isPrivate()) {
-            throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION, key);
+    public PrivateKey deserializePrivateKey(String key) {
+        try {
+            final Base64.Decoder decoder = Base64.getDecoder();
+            final byte[] keyEncoded = decoder.decode(key);
+            final AsymmetricKeyParameter keyParams = PrivateKeyFactory.createKey(keyEncoded);
+            if (!keyParams.isPrivate()) {
+                throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION);
+            }
+            final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyEncoded);
+            final KeyFactory instance = getAsymmetricKeyFactory(keyParams);
+            return instance.generatePrivate(keySpec);
+        } catch (NoSuchAlgorithmException | IOException | NoSuchProviderException | InvalidKeySpecException e) {
+            throw new CryptoOperationException(MessagesCode.ERROR_KEY_DERIVATION, e);
         }
-        final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decoder.decode(key));
-        final KeyFactory instance = getAsymmetricKeyFactory(key, keyParams);
-        return instance.generatePrivate(keySpec);
-
 
     }
 
-    private KeyFactory getAsymmetricKeyFactory(String key, AsymmetricKeyParameter keyParams) throws NoSuchAlgorithmException, NoSuchProviderException {
-        SupportedAlgorithm algorithm;
-        if (keyParams instanceof ECKeyParameters) {
-            algorithm = SupportedAlgorithm.ECDSA;
-        } else if (keyParams instanceof RSAKeyParameters) {
-            algorithm = SupportedAlgorithm.RSA;
-        } else {
-            throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION_NOT_SUPPORTED, key);
-        }
+    private KeyFactory getAsymmetricKeyFactory(AsymmetricKeyParameter keyParams) throws NoSuchAlgorithmException, NoSuchProviderException {
+        final SupportedAlgorithm algorithm = determineAlgorithmFromAsymmetricKey(keyParams);
         return KeyFactory.getInstance(algorithm.name(), BouncyCastleProvider.PROVIDER_NAME);
     }
 
-    @Override
-    public PublicKey deserializePublicKey(String key) throws IOException, NoSuchProviderException, NoSuchAlgorithmException, InvalidKeySpecException {
-
-        final Base64.Decoder decoder = Base64.getDecoder();
-        final AsymmetricKeyParameter keyParams = PublicKeyFactory.createKey(decoder.decode(key));
-        if (keyParams.isPrivate()) {
-            throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION, key);
+    private SupportedAlgorithm determineAlgorithmFromAsymmetricKey(final AsymmetricKeyParameter keyParams) {
+        if (keyParams instanceof ECKeyParameters) {
+            return SupportedAlgorithm.ECDSA;
+        } else if (keyParams instanceof RSAKeyParameters) {
+            return SupportedAlgorithm.RSA;
         }
-        final X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decoder.decode(key));
-        final KeyFactory instance = getAsymmetricKeyFactory(key, keyParams);
-        return instance.generatePublic(keySpec);
+        throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION_NOT_SUPPORTED);
+    }
 
+    @Override
+    public PublicKey deserializePublicKey(String key) {
+        try {
+            final Base64.Decoder decoder = Base64.getDecoder();
+            final byte[] encodedKey = decoder.decode(key);
+            final AsymmetricKeyParameter keyParams = PublicKeyFactory.createKey(encodedKey);
+            if (keyParams.isPrivate()) {
+                throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION);
+            }
+            final X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encodedKey);
+            final KeyFactory instance = getAsymmetricKeyFactory(keyParams);
+            return instance.generatePublic(keySpec);
+        } catch (NoSuchAlgorithmException | IOException | NoSuchProviderException | InvalidKeySpecException e) {
+            throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION,e);
+        }
 
     }
 
