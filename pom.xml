@@ -5,12 +5,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.some-sec.sec-channel</groupId>
-	<artifactId>crypto</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<groupId>com.some-sec.libs</groupId>
+	<artifactId>some-crypto</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
 
-	<name>sec-channel-crypto</name>
-	<url>https://github.com/Some-Sec/sec-channel-crypto</url>
+	<name>some-crypto</name>
+	<url>https://github.com/Some-Sec/some-crypto</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,42 +22,53 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.12</version>
+			<version>1.18.22</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk15on</artifactId>
-			<version>1.66</version>
+			<version>1.69</version>
 		</dependency>
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcpkix-jdk15on</artifactId>
-			<version>1.66</version>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.6.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
+			<version>1.69</version>
 		</dependency>
 		<dependency>
 			<groupId>com.nimbusds</groupId>
 			<artifactId>nimbus-jose-jwt</artifactId>
-			<version>5.7</version>
+			<version>9.16</version>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.8.2</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.35</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.10</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
+
+<!--	<distributionManagement>-->
+<!--		<repository>-->
+<!--			<id>github</id>-->
+<!--			<name>GitHub SomeSec Apache Maven Packages</name>-->
+<!--			<url>https://maven.pkg.github.com/Some-Sec</url>-->
+<!--		</repository>-->
+<!--	</distributionManagement>-->
 
 	<build>
 		<pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
