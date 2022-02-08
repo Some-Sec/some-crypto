@@ -62,13 +62,13 @@
 
 	</dependencies>
 
-	<distributionManagement>
-		<repository>
-			<id>github</id>
-			<name>GitHub SomeSec Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/Some-Sec/some-crypto</url>
-		</repository>
-	</distributionManagement>
+<!--	<distributionManagement>-->
+<!--		<repository>-->
+<!--			<id>github</id>-->
+<!--			<name>GitHub SomeSec Apache Maven Packages</name>-->
+<!--			<url>https://maven.pkg.github.com/Some-Sec</url>-->
+<!--		</repository>-->
+<!--	</distributionManagement>-->
 
 	<build>
 		<pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
