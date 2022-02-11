@@ -6,15 +6,12 @@ name: Maven Package
 on:
   push:
     branches:
-      - 'master'
+      - 'develop'
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - uses: actions/checkout@v2
@@ -24,14 +21,19 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-          settings-path: ${{ github.workspace }} # location for the settings.xml file
-
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
-
-      - name: Publish to GitHub Packages Apache Maven
-        run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
-
-
+      - name: Create Settings file
+        run: |
+          echo $MVN_SETTINGS > settings.xml
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MVN_SETTINGS: ${{ secrets.BOT_SETTINGS }}
+      - name: Build with Maven
+        run: |
+          mvn -B -X package -s settings.xml --file pom.xml
+        env:
+          BOT_NAME: SomeSecBot
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+      - name: Publish to GitHub Packages Apache Maven
+        run: mvn deploy -X -s settings.xml
+        env:
+          BOT_NAME: SomeSecBot
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
