@@ -129,4 +129,9 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	<scm>
+		<developerConnection>
+			scm:git:https://github.com/Some-Sec/some-crypto
+		</developerConnection>
+	</scm>
 </project>
