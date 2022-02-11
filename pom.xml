@@ -5,7 +5,7 @@
 
 	<groupId>com.some-sec.libs</groupId>
 	<artifactId>some-crypto</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 
 	<name>some-crypto</name>
 	<url>https://github.com/Some-Sec/some-crypto</url>
@@ -131,6 +131,6 @@
 		<developerConnection>
 			scm:git:https://github.com/Some-Sec/some-crypto
 		</developerConnection>
-	  <tag>some-crypto-1.0.0</tag>
+	  <tag>HEAD</tag>
   </scm>
 </project>
