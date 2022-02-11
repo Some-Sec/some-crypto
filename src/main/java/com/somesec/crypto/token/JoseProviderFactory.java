@@ -16,27 +16,27 @@ public interface JoseProviderFactory {
 
     /**
      * This will instantiate a new JWE Encrypter, this encrypter is matching the algorithm corresponding to the Key passed in
-     * @param key
+     * @param key needed to determine which algorithm is to be used
      * @return concrete implementation of {@link JWEEncrypter} matching the algorithm of the {@link Key} passed in
      */
     JWEEncrypter getEncrypter(Key key);
     /**
      * This will instantiate a new JWE Decrypter, this decrypter is matching the algorithm corresponding to the Key passed in
-     * @param key
+     * @param key needed to determine which algorithm is to be used
      * @return concrete implementation of {@link JWEDecrypter} matching the algorithm of the {@link Key} passed in
      */
     JWEDecrypter getDecrypter(Key key);
 
     /**
      * This will instantiate a new JWS Signer, this signer is matching the algorithm corresponding to the Key passed in
-     * @param key
+     * @param key needed to determine which algorithm is to be used
      * @return concrete implementation of {@link JWSSigner} matching the algorithm of the {@link Key} passed in
      */
     JWSSigner getSigner(Key key);
 
     /**
      * This will instantiate a new JWS Verifier, this verifier is matching the algorithm corresponding to the Key passed in
-     * @param key
+     * @param key needed to determine which algorithm is to be used
      * @return concrete implementation of {@link JWSVerifier} matching the algorithm of the {@link Key} passed in
      */
     JWSVerifier getVerifier(Key key);
@@ -44,7 +44,7 @@ public interface JoseProviderFactory {
     /**
      * To successfully create a JWE Token, you will need a valid header. To assist this there are HeaderBuilders.
      * This function will return a header builder prefilled with the algorithm corresponding to the key type passed in.
-     * @param key
+     * @param key needed to determine which algorithm is to be used
      * @return prefilled JWEHeaderBuilder
      */
     JWEHeader.Builder getJWEHeaderBuilder(Key key);
@@ -52,7 +52,7 @@ public interface JoseProviderFactory {
     /**
      * To successfully create a JWS Token, you will need a valid header. To assist this there are HeaderBuilders.
      * This function will return a header builder prefilled with the algorithm corresponding to the key type passed in.
-     * @param key
+     * @param key needed to determine which algorithm is to be used
      * @return prefilled JWSHeaderBuilder
      */
     JWSHeader.Builder getJWSHeaderBuilder(Key key);

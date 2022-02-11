@@ -14,8 +14,8 @@ public interface KeyOperation {
     /**
      * Key derivation based on PBKF2 as the name suggest this will generate a {@link javax.crypto.SecretKey} based of some passphrase
      *
-     * @param passphrase
-     * @param algorithm
+     * @param passphrase the passphrase used for the key derivation
+     * @param algorithm the algorithm that shall be supported by the key, for example {@link com.somesec.crypto.constant.SupportedAlgorithm#AES}
      * @return new SecretKey based on passphrase
      */
     Key deriveSecretKey(char[] passphrase, CryptoAlgorithm algorithm);
@@ -23,7 +23,7 @@ public interface KeyOperation {
     /**
      * This will generate a {@link KeyPair} based on the passed in algorithm, RSA or ECDSA
      *
-     * @param algorithm
+     * @param algorithm the algorithm that shall be supported by the key, for example {@link com.somesec.crypto.constant.SupportedAlgorithm#RSA}
      * @return freshly generated KeyPair for asymmetric cryptography
      */
     KeyPair generateKeyPair(CryptoAlgorithm algorithm);
@@ -38,7 +38,7 @@ public interface KeyOperation {
     /**
      * Deserializes a {@link PrivateKey} that is passed in in double encoded form like this Base64(Pem(PrivateKey))
      *
-     * @param key
+     * @param key the base64 encoded private key
      * @return a private key object representing the key passed in
      */
     PrivateKey deserializePrivateKey(String key);
@@ -46,7 +46,7 @@ public interface KeyOperation {
     /**
      * Deserializes a {@link PublicKey} that is passed in in double encoded form like this Base64(Pem(PublicKey))
      *
-     * @param key
+     * @param key the base64 encoded public key
      * @return a public key object representing the key passed in
      */
     PublicKey deserializePublicKey(String key);
@@ -54,7 +54,7 @@ public interface KeyOperation {
     /**
      * Creates the fingerprint of a key, in this implementation the hashing algorithm is at least Sha256
      *
-     * @param key
+     * @param key an object that implements {@link Key}
      * @return Hashed representation of Key
      */
     String getKeyFingerprint(Key key);
@@ -63,7 +63,7 @@ public interface KeyOperation {
      * This function deserializes a SecretKey that will be passed in Base64 encoded
      *
      * @param secret the base 64 encoded {@link javax.crypto.SecretKey}
-     * @return the Key object
+     * @return the deserialized Key object
      */
     Key deserializeSecretKey(String secret);
 }

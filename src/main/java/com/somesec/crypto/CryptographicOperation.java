@@ -23,7 +23,7 @@ public interface CryptographicOperation {
 
     /**
      * This will deliver the name of the algorithm for the respective implementation for example AES
-     * @return
+     * @return the name of the algorithm implementing this operation
      */
     String getAlgorithmName();
 }
