@@ -105,7 +105,7 @@ public class DefaultKeyOperationImpl implements KeyOperation {
 
     }
 
-
+    @Deprecated(since = "1.0.4",forRemoval = true)
     @Override
     public PrivateKey deserializePrivateKey(String key) {
         final Base64.Decoder decoder = Base64.getDecoder();
@@ -142,6 +142,7 @@ public class DefaultKeyOperationImpl implements KeyOperation {
         throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION_NOT_SUPPORTED);
     }
 
+    @Deprecated(since = "1.0.4",forRemoval = true)
     @Override
     public PublicKey deserializePublicKey(String key) {
         final Base64.Decoder decoder = Base64.getDecoder();
@@ -175,6 +176,7 @@ public class DefaultKeyOperationImpl implements KeyOperation {
         return Hex.toHexString(fingerprint);
     }
 
+    @Deprecated(since = "1.0.4",forRemoval = true)
     @Override
     public Key deserializeSecretKey(String secret) {
         return new SecretKeySpec(Base64.getDecoder().decode(secret), SupportedAlgorithm.AES.name());
