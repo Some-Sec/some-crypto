@@ -23,7 +23,6 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -95,30 +94,38 @@ public class DefaultKeyOperationImpl implements KeyOperation {
             byte[] seed = new byte[(int) resolver.getConfig(DefaultConfig.SYMMETRIC_KEY_SIZE)];
             final SecureRandom rnd = SecureRandom.getInstanceStrong();
             rnd.nextBytes(seed);
-            return this.deriveSecretKey(new String(seed, StandardCharsets.UTF_8).toCharArray(), SupportedAlgorithm.AES);
+            final char[] passphrase = new char[seed.length];
+            for (int i = 0; i < seed.length; i++) {
+                passphrase[i]= ((char) seed[i]);
+            }
+            return this.deriveSecretKey(passphrase, SupportedAlgorithm.AES);
         } catch (NoSuchAlgorithmException e) {
             throw new CryptoOperationException(MessagesCode.ERROR_KEY_DERIVATION, e);
         }
 
     }
 
-
+    @Deprecated(since = "1.0.4",forRemoval = true)
     @Override
     public PrivateKey deserializePrivateKey(String key) {
+        final Base64.Decoder decoder = Base64.getDecoder();
+        final byte[] keyEncoded = decoder.decode(key);
+        return this.deserializePrivateKey(keyEncoded);
+    }
+
+    @Override
+    public PrivateKey deserializePrivateKey(byte[] key) {
         try {
-            final Base64.Decoder decoder = Base64.getDecoder();
-            final byte[] keyEncoded = decoder.decode(key);
-            final AsymmetricKeyParameter keyParams = PrivateKeyFactory.createKey(keyEncoded);
+            final AsymmetricKeyParameter keyParams = PrivateKeyFactory.createKey(key);
             if (!keyParams.isPrivate()) {
                 throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION);
             }
-            final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyEncoded);
+            final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(key);
             final KeyFactory instance = getAsymmetricKeyFactory(keyParams);
             return instance.generatePrivate(keySpec);
         } catch (NoSuchAlgorithmException | IOException | NoSuchProviderException | InvalidKeySpecException e) {
             throw new CryptoOperationException(MessagesCode.ERROR_KEY_DERIVATION, e);
         }
-
     }
 
     private KeyFactory getAsymmetricKeyFactory(AsymmetricKeyParameter keyParams) throws NoSuchAlgorithmException, NoSuchProviderException {
@@ -135,22 +142,28 @@ public class DefaultKeyOperationImpl implements KeyOperation {
         throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION_NOT_SUPPORTED);
     }
 
+    @Deprecated(since = "1.0.4",forRemoval = true)
     @Override
     public PublicKey deserializePublicKey(String key) {
+        final Base64.Decoder decoder = Base64.getDecoder();
+        final byte[] encodedKey = decoder.decode(key);
+        return this.deserializePublicKey(encodedKey);
+
+    }
+
+    @Override
+    public PublicKey deserializePublicKey(byte[] key) {
         try {
-            final Base64.Decoder decoder = Base64.getDecoder();
-            final byte[] encodedKey = decoder.decode(key);
-            final AsymmetricKeyParameter keyParams = PublicKeyFactory.createKey(encodedKey);
+            final AsymmetricKeyParameter keyParams = PublicKeyFactory.createKey(key);
             if (keyParams.isPrivate()) {
                 throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION);
             }
-            final X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encodedKey);
+            final X509EncodedKeySpec keySpec = new X509EncodedKeySpec(key);
             final KeyFactory instance = getAsymmetricKeyFactory(keyParams);
             return instance.generatePublic(keySpec);
         } catch (NoSuchAlgorithmException | IOException | NoSuchProviderException | InvalidKeySpecException e) {
             throw new CryptoOperationException(MessagesCode.ERROR_KEY_DESERIALIZATION, e);
         }
-
     }
 
     @Override
@@ -163,10 +176,16 @@ public class DefaultKeyOperationImpl implements KeyOperation {
         return Hex.toHexString(fingerprint);
     }
 
+    @Deprecated(since = "1.0.4",forRemoval = true)
     @Override
     public Key deserializeSecretKey(String secret) {
         return new SecretKeySpec(Base64.getDecoder().decode(secret), SupportedAlgorithm.AES.name());
 
+    }
+
+    @Override
+    public Key deserializeSecretKey(byte[] secret) {
+        return new SecretKeySpec(secret, SupportedAlgorithm.AES.name());
     }
 
 
