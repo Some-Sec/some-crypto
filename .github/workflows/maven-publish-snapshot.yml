@@ -8,6 +8,11 @@ on:
     branches:
       - 'develop'
 
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
+      - '.gitignore'
+
 jobs:
   build:
 
