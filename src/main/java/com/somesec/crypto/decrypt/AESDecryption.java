@@ -13,10 +13,17 @@ import javax.crypto.spec.GCMParameterSpec;
 import java.nio.ByteBuffer;
 import java.security.Key;
 
+/**
+ * Concrete implementation of a {@link DecryptionOperation} decrypts {@link DefaultConfig#AES_CIPHER_NAME} ciphertext
+ */
 public final class AESDecryption implements DecryptionOperation {
 
     private final ConfigurationResolver resolver;
 
+    /**
+     * Creates a new {@link AESDecryption} instance with the passed {@link ConfigurationResolver}
+     * @param resolver
+     */
     public AESDecryption(final ConfigurationResolver resolver) {
         this.resolver = resolver;
     }

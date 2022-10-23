@@ -6,10 +6,17 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.List;
 
+/**
+ * {@see DecryptionService}
+ */
 public class DecryptionServiceImpl implements DecryptionService {
 
     private final List<DecryptionOperation> cryptoOperations;
 
+    /**
+     * Create an instance able to handle the passed in decryption operations
+     * @param cryptoOperations
+     */
     public DecryptionServiceImpl(List<DecryptionOperation> cryptoOperations) {
         this.cryptoOperations = cryptoOperations;
     }
@@ -28,6 +35,11 @@ public class DecryptionServiceImpl implements DecryptionService {
 
     }
 
+    /**
+     * Determines which {@link DecryptionOperation} to use based on KeyType
+     * @param key
+     * @return A supported decryption Operation
+     */
     // todo unit test
     protected DecryptionOperation findSupportedOperation(Key key) {
 

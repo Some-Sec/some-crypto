@@ -7,6 +7,9 @@ import java.security.Key;
 import java.util.Base64;
 import java.util.List;
 
+/**
+ * {@see EncryptionService}
+ */
 public class EncryptionServiceImpl implements EncryptionService {
 
     private static final Base64.Encoder B_64_ENCODER = Base64.getEncoder();
