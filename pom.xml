@@ -5,7 +5,7 @@
 
 	<groupId>com.some-sec.libs</groupId>
 	<artifactId>some-crypto</artifactId>
-	<version>1.0.7-SNAPSHOT</version>
+	<version>1.0.7</version>
     <packaging>jar</packaging>
 
     <name>Some-Sec some-crypto, a wholesome crypto lib</name>
@@ -15,7 +15,7 @@
         <developerConnection>
             scm:git:https://github.com/Some-Sec/some-crypto
         </developerConnection>
-        <tag>HEAD</tag>
+        <tag>v1.0.7</tag>
         <url>https://github.com/Some-Sec/some-crypto</url>
     </scm>
     <licenses>
