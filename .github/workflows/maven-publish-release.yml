@@ -37,7 +37,16 @@ jobs:
           echo $MVN_SETTINGS > settings.xml
         env:
           MVN_SETTINGS: ${{ secrets.BOT_SETTINGS }}
-
+      - name: Create key file
+        run: |
+          echo $KEY_FILE | base64 --decode > private.gpg
+        env:
+          KEY_FILE: ${{ secrets.GPG_BACKUP }}
+      - name: Import key file
+        run: |
+          gpg --pinentry-mode=loopback --passphrase "$GPG_KEY_PASS" --import-options restore --import private.gpg
+        env:
+          GPG_KEY_PASS: ${{ secrets.GPG_KEY_PASS }}
       - name: Configure Git User
         run: |
           git config user.email "actions@github.com"
