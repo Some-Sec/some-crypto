@@ -10,7 +10,14 @@
 
     <name>Some-Sec some-crypto, a wholesome crypto lib</name>
     <url>https://github.com/Some-Sec/some-crypto</url>
-
+    <description>This is the some-sec's teams idea of an easy to use crypto library. You want to quickly encrypt something, we got you covered.</description>
+    <scm>
+        <developerConnection>
+            scm:git:https://github.com/Some-Sec/some-crypto
+        </developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/Some-Sec/some-crypto</url>
+    </scm>
     <licenses>
         <license>
             <name>Apache 2 Licence</name>
@@ -167,10 +174,5 @@
             </plugin>
         </plugins>
     </build>
-    <scm>
-        <developerConnection>
-            scm:git:https://github.com/Some-Sec/some-crypto
-        </developerConnection>
-        <tag>HEAD</tag>
-    </scm>
+
 </project>
