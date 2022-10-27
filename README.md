@@ -11,7 +11,7 @@ vulnerabilities
 
 - Clone the repository
   `https://github.com/Some-Sec/some-crypto.git`
-- build the project `maven clean install`
+- build the project `mvn clean install`
 
 - embed the library as a dependency into your `pom.xml`
 
@@ -19,7 +19,7 @@ vulnerabilities
   <dependency>
         <groupId>com.some-sec.libs</groupId>
         <artifactId>some-crypto</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.6</version>
   </dependency>
 ```
 
