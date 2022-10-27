@@ -4,6 +4,7 @@
 name: Maven Package
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - 'develop'
@@ -28,7 +29,7 @@ jobs:
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
       - name: Create Settings file
         run: |
-          echo $MVN_SETTINGS > settings.xml
+          echo $MVN_SETTINGS > settings.xml && cat settings.xml
         env:
           MVN_SETTINGS: ${{ secrets.BOT_SETTINGS }}
       - name: Build with Maven
