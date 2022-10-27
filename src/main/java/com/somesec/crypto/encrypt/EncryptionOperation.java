@@ -4,6 +4,9 @@ import com.somesec.crypto.CryptographicOperation;
 
 import java.security.Key;
 
+/**
+ * A cryptographic operation dedicated for the encryption of data
+ */
 public interface EncryptionOperation extends CryptographicOperation {
     /**
      * Encrypts your byte[] payload with some sane defaults based on your Key type

@@ -5,15 +5,25 @@ import com.somesec.crypto.exception.CryptoOperationException;
 
 import java.util.Arrays;
 
+/**
+ * {@see ConfigurationResolver}
+ */
 public class ConfigurationResolverImpl implements ConfigurationResolver {
 
 
     private final PropertySource propertySource;
 
+    /**
+     * Will create a new instance of {@link ConfigurationResolver}
+     * it will return the somewhat sane default configuration as described in {@link DefaultConfig}
+     */
     public ConfigurationResolverImpl() {
         propertySource = null;
     }
-
+    /**
+     * Will create a new instance of {@link ConfigurationResolver} returning properties defined in {@link PropertySource}
+     * it will override the somewhat sane default configuration from {@link DefaultConfig}
+     */
     public ConfigurationResolverImpl(final PropertySource propertySource) {
         this.propertySource = propertySource;
     }

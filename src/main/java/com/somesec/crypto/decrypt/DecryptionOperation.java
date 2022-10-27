@@ -4,6 +4,9 @@ import com.somesec.crypto.CryptographicOperation;
 
 import java.security.Key;
 
+/**
+ * A cryptographic operation dedicated for the decryption of data
+ */
 public interface DecryptionOperation extends CryptographicOperation {
 
     /**

@@ -13,11 +13,17 @@ import javax.crypto.spec.GCMParameterSpec;
 import java.nio.ByteBuffer;
 import java.security.Key;
 import java.security.SecureRandom;
-
+/**
+ * Concrete implementation of a {@link EncryptionOperation} encrypts plain text with the {@link DefaultConfig#AES_CIPHER_NAME}
+ */
 public final class AESEncryption implements EncryptionOperation {
 
     private final ConfigurationResolver resolver;
 
+    /**
+     * Creates a new {@link AESEncryption} instance with the passed {@link ConfigurationResolver}
+     * @param resolver
+     */
     public AESEncryption(final ConfigurationResolver resolver) {
         this.resolver = resolver;
     }

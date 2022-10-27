@@ -17,7 +17,7 @@ public interface ConfigurationResolver {
 
     /**
      * Finds the configuration associated to a key in the property source attached to this.
-     * Furthermore this function will call {@link Enum#name()} and use the name of the enum as a key to pass it into {@link this#getConfig(String)}
+     * Furthermore this function will call {@link Enum#name()} and use the name of the enum as a key to pass it into {@link ConfigurationResolver#getConfig(String)}
      *
      * @param key associated to configuration property
      * @param <T> the type expected to be returned
