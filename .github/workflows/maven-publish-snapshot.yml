@@ -32,14 +32,18 @@ jobs:
           echo $MVN_SETTINGS > settings.xml && cat settings.xml
         env:
           MVN_SETTINGS: ${{ secrets.BOT_SETTINGS }}
+      - name: Create key file
+        run: |
+          echo $KEY_FILE | base64 --decode > private.gpg
+        env:
+          KEY_FILE: ${{ secrets.GPG_BACKUP }}
+      - name: Import key file
+        run: |
+          gpg --pinentry-mode=loopback --passphrase "$GPG_KEY_PASS" --import-options restore --import private.gpg
+        env:
+          GPG_KEY_PASS: ${{ secrets.GPG_KEY_PASS }}
       - name: Build with Maven
         run: |
           mvn -B -X package -s settings.xml --file pom.xml
-        env:
-          BOT_NAME: SomeSecBot
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-      - name: Publish to GitHub Packages Apache Maven
+      - name: Publish to Sonatype
         run: mvn deploy -X -s settings.xml
-        env:
-          BOT_NAME: SomeSecBot
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
