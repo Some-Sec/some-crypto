@@ -66,6 +66,7 @@ public final class AESEncryption implements EncryptionOperation {
                 cipherText.write(cipher.update(plainText.readNBytes(resolver.getConfig(DefaultConfig.MEGA_BYTE))));
             }
             cipherText.write(cipher.doFinal());
+            cipherText.flush();
         } catch (Exception ex) {
             throw new CryptoOperationException(MessagesCode.ERROR_ENCRYPTION_ALGO, ex, getAlgorithmName());
         }

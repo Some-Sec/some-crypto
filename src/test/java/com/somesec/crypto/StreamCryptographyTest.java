@@ -27,7 +27,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.Security;
 
-public class IntegrationTest {
+public class StreamCryptographyTest {
 
     public static final int TEN_MEGABYTE = 1024 * 1024 * 10;
     final EncryptionOperation encryptionOperation;
@@ -66,17 +66,14 @@ public class IntegrationTest {
         Assertions.assertEquals(TEN_MEGABYTE, Files.size(plaintextTestFile));
         final byte[] plainTextFingerPrint = fingerPrintFile(plaintextTestFile);
         final String plainTextHash = Hex.toHexString(plainTextFingerPrint);
-        System.out.println("Plaintext : " + plainTextHash);
         encryptionOperation.encrypt(Files.newInputStream(plaintextTestFile), Files.newOutputStream(ciphertextTestFile), key);
         Assertions.assertTrue(TEN_MEGABYTE < Files.size(ciphertextTestFile));
         final byte[] cipheredFileHash = fingerPrintFile(ciphertextTestFile);
         final String ciphertextHash = Hex.toHexString(cipheredFileHash);
         Assertions.assertNotEquals(plainTextHash, ciphertextHash);
-        System.out.println("Ciphertext : " + ciphertextHash);
         final byte[] decryptedBytes = decryptionOperation.decrypt(Files.readAllBytes(ciphertextTestFile), key);
         final String decryptedFileHash = Hex.toHexString(fingerprint(decryptedBytes));
         Assertions.assertEquals(plainTextHash, decryptedFileHash);
-        System.out.println("Decryptedtext : " + decryptedFileHash);
         Assertions.assertTrue(plain.delete());
         Assertions.assertTrue(ciphered.delete());
     }
@@ -89,18 +86,14 @@ public class IntegrationTest {
         random.nextBytes(data);
         final byte[] plainTextFingerPrint = fingerprint(data);
         final String plainTextHash = Hex.toHexString(plainTextFingerPrint);
-        System.out.println("Plaintext : " + plainTextHash);
         final byte[] encryptedData = encryptionOperation.encrypt(data, key);
         final byte[] cipheredDataHash = fingerprint(encryptedData);
         final String ciphertextHash = Hex.toHexString(cipheredDataHash);
         Assertions.assertNotEquals(plainTextHash, ciphertextHash);
-        System.out.println("Ciphertext : " + ciphertextHash);
         try (final InputStream in = new ByteArrayInputStream(encryptedData); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             decryptionOperation.decrypt(in, outputStream, key);
             final String decryptedFileHash = Hex.toHexString(fingerprint(outputStream.toByteArray()));
             Assertions.assertEquals(plainTextHash, decryptedFileHash);
-            System.out.println("Decryptedtext : " + decryptedFileHash);
-
         }
     }
 

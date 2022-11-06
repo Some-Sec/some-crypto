@@ -61,6 +61,7 @@ public final class AESDecryption implements DecryptionOperation {
                 plainText.write(cipher.update(cipherText.readNBytes(resolver.getConfig(DefaultConfig.MEGA_BYTE))));
             }
             plainText.write(cipher.doFinal());
+            plainText.flush();
         } catch (Exception ex) {
             throw new CryptoOperationException(MessagesCode.ERROR_DECRYPTION_ALGO, ex, getAlgorithmName());
         }
