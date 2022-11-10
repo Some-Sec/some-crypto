@@ -13,7 +13,7 @@ import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class AESEncryptionTest {
+public class EncryptionServiceTest {
 
     private static final String AES_KEY_256_B64 = "dSgVkXp2s5v8y/B?E(H+MbQeThWmZq3t";
     private static final String PLAIN_TEXT = "super test";
@@ -21,7 +21,7 @@ public class AESEncryptionTest {
     private final EncryptionService service = new EncryptionServiceImpl(Collections.singletonList(new AESEncryption(new ConfigurationResolverImpl())));
 
     @Test
-    public void aesSymmetricEncryptTest() throws Exception {
+    public void aesEncryptTest() throws Exception {
         Security.addProvider(new BouncyCastleProvider());
         Key aesKey = new SecretKeySpec(AES_KEY_256_B64.getBytes(), "AES");
         byte[] encryptedBytes = service.encrypt(PLAIN_TEXT.getBytes(StandardCharsets.UTF_8), aesKey);

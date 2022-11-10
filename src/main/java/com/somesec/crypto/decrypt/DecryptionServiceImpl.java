@@ -2,6 +2,8 @@ package com.somesec.crypto.decrypt;
 
 import com.somesec.crypto.constant.CryptographicType;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.List;
@@ -31,8 +33,12 @@ public class DecryptionServiceImpl implements DecryptionService {
     public byte[] decrypt(byte[] cypheredBytes, Key key) {
         final DecryptionOperation decryptionOperation = findSupportedOperation(key);
         return decryptionOperation.decrypt(cypheredBytes, key);
+    }
 
-
+    @Override
+    public void decrypt(InputStream cipherText, OutputStream plainText, Key key) {
+        final DecryptionOperation decryptionOperation = findSupportedOperation(key);
+        decryptionOperation.decrypt(cipherText, plainText, key);
     }
 
     /**

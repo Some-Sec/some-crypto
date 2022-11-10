@@ -3,7 +3,7 @@ package com.somesec.crypto.config;
 /**
  * Cryptography constants that will be used as the default parameters in Encryption/Decryption operations if no arguments are provided.
  */
-public enum DefaultConfig  {
+public enum DefaultConfig {
     /**
      * RSA Algorithm Name
      */
@@ -61,7 +61,11 @@ public enum DefaultConfig  {
     /**
      * How many bits per byte
      */
-    BIT_IN_A_BYTE(8);
+    BIT_IN_A_BYTE(8),
+    /**
+     * How many bytes in a megabyte
+     */
+    MEGA_BYTE(1024 * 1024);
 
     private final Object value;
 
@@ -71,6 +75,7 @@ public enum DefaultConfig  {
 
     /**
      * Returns the configs containing value casted to the expected type
+     *
      * @param <T> The type to be casted to
      * @return the default configuration
      */

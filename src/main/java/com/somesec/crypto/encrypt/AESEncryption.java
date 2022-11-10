@@ -10,9 +10,12 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.security.Key;
 import java.security.SecureRandom;
+
 /**
  * Concrete implementation of a {@link EncryptionOperation} encrypts plain text with the {@link DefaultConfig#AES_CIPHER_NAME}
  */
@@ -22,6 +25,7 @@ public final class AESEncryption implements EncryptionOperation {
 
     /**
      * Creates a new {@link AESEncryption} instance with the passed {@link ConfigurationResolver}
+     *
      * @param resolver
      */
     public AESEncryption(final ConfigurationResolver resolver) {
@@ -41,6 +45,28 @@ public final class AESEncryption implements EncryptionOperation {
                     .put(nonce)
                     .put(cipherText)
                     .array();
+        } catch (Exception ex) {
+            throw new CryptoOperationException(MessagesCode.ERROR_ENCRYPTION_ALGO, ex, getAlgorithmName());
+        }
+    }
+
+    @Override
+    public void encrypt(InputStream plainText, OutputStream cipherText, Key key) {
+        try (plainText; cipherText) {
+            Cipher cipher = Cipher.getInstance(resolver.getConfig(DefaultConfig.AES_CIPHER_NAME), BouncyCastleProvider.PROVIDER_NAME);
+            SecureRandom random = SecureRandom.getInstanceStrong();
+            final byte[] nonce = new byte[(int) resolver.getConfig(DefaultConfig.AES_GCM_NONCE_LENGTH)];
+            random.nextBytes(nonce);
+            GCMParameterSpec spec = new GCMParameterSpec((int) resolver.getConfig(DefaultConfig.AES_GCM_TAG_LENGTH_BYTE) * ((int) resolver.getConfig(DefaultConfig.BIT_IN_A_BYTE)), nonce);
+            cipher.init(Cipher.ENCRYPT_MODE, key, spec);
+            if (plainText.available() > 0) {
+                cipherText.write(nonce);
+            }
+            while (plainText.available() > 0) {
+                cipherText.write(cipher.update(plainText.readNBytes(resolver.getConfig(DefaultConfig.MEGA_BYTE))));
+            }
+            cipherText.write(cipher.doFinal());
+            cipherText.flush();
         } catch (Exception ex) {
             throw new CryptoOperationException(MessagesCode.ERROR_ENCRYPTION_ALGO, ex, getAlgorithmName());
         }

@@ -2,6 +2,8 @@ package com.somesec.crypto.encrypt;
 
 import com.somesec.crypto.constant.CryptographicType;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Base64;
@@ -31,6 +33,12 @@ public class EncryptionServiceImpl implements EncryptionService {
         final EncryptionOperation encryptionOperation = findSupportedOperation(key);
         return encryptionOperation.encrypt(plaintextBytes, key);
 
+    }
+
+    @Override
+    public void encrypt(InputStream plainText, OutputStream cipherText, Key key) {
+        final EncryptionOperation encryptionOperation = findSupportedOperation(key);
+        encryptionOperation.encrypt(plainText,cipherText,key);
     }
 
     // todo unit test
